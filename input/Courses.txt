@@ -1,0 +1,7 @@
+CS100,Advanced Comic Strips
+AH255,History of Modern Comic Strip Art
+CSSE255,Digital Comic Strip Design
+CHEM100,Essential Chemistry for Artists
+PH201,Time and Space
+BIO355,Genetics and Molecular Biology for Artists
+CAP410,Senior Project- Design your own Comic Strip

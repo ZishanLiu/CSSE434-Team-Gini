@@ -1,0 +1,17 @@
+Bill Watterson,CS100, 92.5
+Randall Munroe,CS100, 90
+Bill Watterson,AH255, 82.5
+Randall Munore,AH255, 85
+Bill Watterson,CSSE255, 87.5
+Randall Munroe,CSSE255, 89.5
+Bill Watterson,CHEM100, 65
+Bill Watterson,PH201, 70
+Bill Watterson,BIO355, 72.75
+Randall Munroe,BIO355, 74
+Randall Munroe,CHEM100, 75
+Randall Munroe,PH201, 76
+Sriram Mohan,CSSE255, 95
+Sriram Mohan,PH201, 88.5
+Sriram Mohan,CHEM100, 84.5
+Sriram Mohan,AH255, 79
+Sriram Mohan,BIO355, 80
