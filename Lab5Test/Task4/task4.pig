@@ -22,7 +22,7 @@ grouped_error = group error_records by name;
 error_count = FOREACH grouped_error GENERATE group as name, COUNT(error_records.type) as errors;
 join_both_records = JOIN join_hit_records by name LEFT OUTER, error_count by name;
 DUMP join_both_records;
-result = FOREACH join_both_records GENERATE total_count::name as name, DIVIDE(hits,total) as hit_rate, DIVIDE(errors,total) as error_rate,
+result = FOREACH join_both_records GENERATE join_hit_records::name as name, DIVIDE(hits,total) as hit_rate, DIVIDE(errors,total) as error_rate,
 GetYear(CurrentTime()) as year, GetMonth(CurrentTime()) as month, GetDay(CurrentTime()) as date, GetHour(CurrentTime()) as hour;
 STORE result into '$output//$DATETIME' using PigStorage('\t');
 
