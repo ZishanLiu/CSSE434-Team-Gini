@@ -20,7 +20,7 @@ join_hit_records = JOIN total_count by name LEFT OUTER, hit_count by name;
 error_records = FILTER cleaned_records by type == 'Error';
 grouped_error = group error_records by name;
 error_count = FOREACH grouped_error GENERATE group as name, COUNT(error_records.type) as errors;
-join_both_records = JOIN join_hit_records by name LEFT OUTER, error_count by name;
+join_both_records = JOIN join_hit_records by total_count::name LEFT OUTER, error_count by name;
 describe join_both_records
 DUMP join_both_records;
 result = FOREACH join_both_records GENERATE total_count::name as name, DIVIDE(hits,total) as hit_rate, DIVIDE(errors,total) as error_rate,
