@@ -20,7 +20,7 @@ join_records = JOIN total_count by name LEFT OUTER, hit_count by name;
 -- error_records = FILTER valid_records by type == 'Error';
 -- error_count = FOREACH grouped_records GENERATE group as name, COUNT(error_records);
 
-result = FOREACH join_records GENERATE name, DIVIDE(hits,total) as hit_rate,
+result = FOREACH join_records GENERATE cleaned_records::name as name, DIVIDE(hits,total) as hit_rate,
 GetYear(CurrentTime()) as year, GetMonth(CurrentTime()) as month, GetDay(CurrentTime()) as date, GetHour(CurrentTime()) as hour;
 STORE result into '$output//$DATETIME' using PigStorage('\t');
 
