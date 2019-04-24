@@ -10,7 +10,7 @@ truncated_records = FOREACH split_records GENERATE split_log.$7 as name, split_l
 valid_records = FILTER truncated_records by CHECKBLOG(name);
 cleaned_records = FOREACH valid_records generate TRIM(name) as name, type;
 grouped_records = GROUP cleaned_records BY name;
-total_count = FOREACH grouped_records GENERATE group as name, COUNT(cleaned_records.type) as total;
+total_count = FOREACH grouped_records GENERATE group as name, COUNT(cleaned_records) as total;
 hit_records = FILTER cleaned_records by type == 'Hit';
 grouped_hit = group hit_records by name;
 hit_count = FOREACH grouped_hit GENERATE group as name, COUNT(hit_records.type) as hits;
