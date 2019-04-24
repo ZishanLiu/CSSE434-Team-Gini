@@ -1,1 +1,1 @@
-pig -x local -p input=tempInput.txt -p output=tempOutput.txt task1.pig 
+pig -x local -p input=testFile.txt -p output=tempOutput.txt task2.pig 
