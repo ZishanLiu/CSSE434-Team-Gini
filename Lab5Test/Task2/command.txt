@@ -1,1 +1,3 @@
-pig -x local -p input=testFile.txt -p output=tempOutput.txt task2.pig 
+//hadoop fs -mkdir /tmp/wangc6/
+hadoop fs -put *.txt *.jar /tmp/wangc6/
+pig -x mapreduce -p input=/tmp/wangc6/testFile.txt -p output=/tmp/wangc6/output task2.pig 
