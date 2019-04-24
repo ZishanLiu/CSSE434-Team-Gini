@@ -1,6 +1,8 @@
-records = LOAD '$input' using PigStorage() AS sentence;
-trecords = FOREACH records GENERATE flatten(TOKENIZE(sentence)) as word;
+REGISTER 'hdfs:///tmp/input/PigUDF-0.0.1-SNAPSHOT.jar';
+DEFINE UPPER edu.rosehulman.wangc6.Upper();
+records = LOAD '$input' using PigStorage() AS (sentence:chararray);
+trecords = FOREACH records GENERATE flatten(TOKENIZE(UPPER(sentence))) as word;
 DUMP trecords;
--- grecords = GROUP frecords BY year;
--- result = FOREACH grecords GENERATE group as year, MIN(frecords.temperature) as MinTemp, MAX(frecords.temperature) as MaxTemp, AVG(frecords.temperature) as AvgTemp;
--- STORE result INTO '$output' USING PigStorage(',');
+grecords = GROUP trecords BY word;
+result = FOREACH grecords GENERATE group as Word, COUNT(trecords.word) as Count;
+STORE result INTO '$output' USING PigStorage(',');
