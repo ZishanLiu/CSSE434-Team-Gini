@@ -1,5 +1,5 @@
--- %declare NOW 'date +%Y-%m-%d'
-%declare DATETIME CurrentTime();
+%declare DATETIME `date +%Y-%m-%d`
+-- %declare DATETIME CurrentTime();
 REGISTER 'hdfs:///tmp/wangc6/PigUDF-0.0.1-SNAPSHOT.jar';
 DEFINE DIVIDE edu.rosehulman.wangc6.Divide();
 DEFINE TRIM edu.rosehulman.wangc6.Trim();
@@ -21,7 +21,7 @@ join_records = JOIN total_count by name LEFT OUTER, hit_count by name;
 -- error_count = FOREACH grouped_records GENERATE group as name, COUNT(error_records);
 
 result = FOREACH join_records GENERATE name, DIVIDE(hits,total) as hit_rate,
-GetYear(DATETIME) as year, GetMonth(DATETIME) as month, GetDay(DATETIME) as dat, GetHour(DATETIME) as hour;
+GetYear(CurrentTime()) as year, GetMonth(CurrentTime()) as month, GetDay(CurrentTime()) as date, GetHour(CurrentTime()) as hour;
 STORE result into '$output//$DATETIME' using PigStorage('\t');
 
 
