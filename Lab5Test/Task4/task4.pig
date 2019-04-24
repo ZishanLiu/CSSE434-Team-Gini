@@ -16,7 +16,6 @@ grouped_hit = group hit_records by name;
 hit_count = FOREACH grouped_hit GENERATE group as name, COUNT(hit_records.type) as hits;
 join_records = JOIN total_count by name LEFT OUTER, hit_count by name;
 
-
 -- error_records = FILTER valid_records by type == 'Error';
 -- error_count = FOREACH grouped_records GENERATE group as name, COUNT(error_records);
 
