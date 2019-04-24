@@ -3,21 +3,28 @@
 REGISTER 'hdfs:///tmp/wangc6/PigUDF-0.0.1-SNAPSHOT.jar';
 DEFINE DIVIDE edu.rosehulman.wangc6.Divide();
 DEFINE TRIM edu.rosehulman.wangc6.Trim();
+DEFINE CHECKBLOG edu.rosehulman.wangc6.CheckBlog();
 records = LOAD '$input' using PigStorage(',') AS (log:chararray);
 split_records = FOREACH records GENERATE STRSPLIT(log) as split_log;
-cleand_records = FOREACH split_records GENERATE TRIM(split_log.$7) as name, split_log.$13 as type;
-grouped_records = GROUP cleand_records BY name;
-result = FOREACH grouped_records GENERATE cleand_records.name as name, DIVIDE(COUNT(type=='Hit'),COUNT*) as hit_rate, DIVIDE(COUNT(type=='Error'),COUNT*) as error_rate, 
+truncated_records = FOREACH split_records GENERATE split_log.$7 as name, split_log.$13 as type;
+valid_records = FILTER truncated_records by CHECKBLOG(name);
+cleaned_records = FOREACH valid_records generate TRIM(name) as name, type;
+grouped_records = GROUP cleaned_records BY name;
+total_count = FOREACH grouped_records GENERATE group as name, COUNT(cleaned_records.type) as total;
+hit_records = FILTER valid_records by type == 'Hit';
+grouped_hit = group hit_records by name;
+hit_count = FOREACH grouped_hit GENERATE group as name, COUNT(hit_records.type) as hits;
+join_records = JOIN total_count by name LEFT OUTER, hit_count by name;
+
+
+-- error_records = FILTER valid_records by type == 'Error';
+-- error_count = FOREACH grouped_records GENERATE group as name, COUNT(error_records);
+
+result = FOREACH join_records GENERATE name, DIVIDE(hits,total) as hit_rate,
 GetYear(DATETIME) as year, GetMonth(DATETIME) as month, GetDay(DATETIME) as dat, GetHour(DATETIME) as hour;
 STORE result into '$output//$DATETIME' using PigStorage('\t');
 
 
---count *
---count x-edge-result-type attribute hits
---count error 
--- divide them using udf
---get datetime
---store it to corresponding directory
 
 -- %declare DATETIME `date +%Y-%m-%d`
 -- REGISTER 'hdfs:///tmp/PigUDF-0.0.1-SNAPSHOT.jar';
