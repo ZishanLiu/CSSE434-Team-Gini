@@ -1,0 +1,2 @@
+pig -x mapreduce -p start_year=2000 -p end_year=2010 avg_period.pig
+pig -x mapreduce recent.pig
