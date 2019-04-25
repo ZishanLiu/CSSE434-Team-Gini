@@ -4,7 +4,7 @@ records = LOAD 'hbase://gini_index'
         AS (name:chararray, code:chararray, year:int, value:float);
 grouped = GROUP records BY (name,code);
 recent = foreach grouped {
-    ordered = order grouped by year DESC;
+    ordered = order records by year DESC;
     limited = limit ordered 1;
     generate flatten(limited);
 }
