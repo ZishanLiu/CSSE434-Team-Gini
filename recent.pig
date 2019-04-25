@@ -8,4 +8,5 @@ recent = foreach grouped {
     limited = limit ordered 1;
     generate flatten(limited);
 }
-DUMP recent;
+result = foreach recent generate name as country, value as value;
+DUMP result;
