@@ -6,6 +6,6 @@ grouped = GROUP records BY (name,code);
 recent = foreach grouped {
     ordered = order gropued by year DESC;
     limited = limit ordered 1;
-    genereate flatten(limited);
+    generate flatten(limited);
 }
 DUMP recent;
