@@ -6,4 +6,4 @@ filtered = FILTER records BY year>=$start_year and year<=$end_year;
 grouped = GROUP filtered BY (name,code);
 avg = foreach grouped generate group.name as name, AVG(filtered.value) as average;
 -- DUMP avg
-store result into '/tmp/gini/output/avg${start_year}' using PigStorage(',','-schema');
+store avg into '/tmp/gini/output/avg${start_year}' using PigStorage(',','-schema');

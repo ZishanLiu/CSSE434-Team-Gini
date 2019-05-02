@@ -1,12 +1,20 @@
-pig -x mapreduce -p start_year=2000 -p end_year=2010 avg_period.pig
-
 hadoop fs -mkdir /tmp/gini/output
+
+pig -x mapreduce -p start_year=2000 -p end_year=2010 avg_period.pig
+hadoop fs -rm /tmp/gini/output/avg2000/.pig_schema
+hadoop fs -getmerge /tmp/gini/output/avg2000 ./avg2000.csv
+
 pig -x mapreduce recent.pig
 hadoop fs -rm /tmp/gini/output/recent/.pig_schema
 hadoop fs -getmerge /tmp/gini/output/recent ./recent.csv
 
-pig -x local count_records_by_country
-pig -x local count_records_by_year
+pig -x mapreduce count_records_by_country
+hadoop fs -rm /tmp/gini/output/records_by_country/.pig_schema
+hadoop fs -getmerge /tmp/gini/output/records_by_country ./records_by_country.csv
+
+pig -x mapreduce count_records_by_year
+hadoop fs -rm /tmp/gini/output/records_by_year/.pig_schema
+hadoop fs -getmerge /tmp/gini/output/records_by_year ./records_by_year.csv
 
 pig -x local -f filter_by.pig -param by=country_name -param value="\'China\'"
 pig -x local -p by=year -p value=2012 filter_by.pig
