@@ -1,4 +1,6 @@
 pig -x mapreduce -p start_year=2000 -p end_year=2010 avg_period.pig
+
+hadoop fs -mkdir /tmp/gini/output
 pig -x mapreduce recent.pig
 
 pig -x local count_records_by_country
