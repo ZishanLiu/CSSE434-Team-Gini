@@ -9,4 +9,4 @@ years = GROUP data by year;
 countries_by_year = FOREACH years GENERATE group,COUNT(data.country_code);
 
 DUMP countries_by_year ;
-
+store result into '/tmp/gini/output/countries_by_year' using PigStorage(',','-schema');

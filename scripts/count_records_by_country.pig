@@ -8,4 +8,5 @@ countries = GROUP data by country_name;
 
 records_by_country = FOREACH countries GENERATE group,COUNT(data.year);
 
-DUMP records_by_country;
+-- DUMP records_by_country;
+store result into '/tmp/gini/output/records_by_country' using PigStorage(',','-schema');
