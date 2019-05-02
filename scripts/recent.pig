@@ -9,4 +9,5 @@ recent = foreach grouped {
     generate flatten(limited);
 }
 result = foreach recent generate name as country, value as value;
-DUMP result;
+-- DUMP result;
+store result into '/gini/output/recent' using PigStorage(',','-schema');
