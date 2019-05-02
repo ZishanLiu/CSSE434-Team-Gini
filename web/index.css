@@ -1,0 +1,43 @@
+body {
+    padding: 0%;
+    margin: 0%;
+}
+
+.sub-content {
+    width: 50%;
+    height: 50%;
+}
+
+h1 {
+    font-size: 50px;
+    position: absolute;
+    
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+}
+
+.search-bar {
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 65%;
+    left: 50%;
+}
+
+input[type=text] {
+    width: 130px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+  }
+  
+  input[type=text]:focus {
+    width: 100%;
+  }

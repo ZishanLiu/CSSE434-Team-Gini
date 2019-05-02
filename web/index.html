@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <!-- <script  src="webhdfs-client.js"></script>
+    <script  src="webhdfs-read-test.js"></script>
+    <script  src="webhdfs-write-test.js"></script> -->
+    <!-- <script src="client.js"></script> -->
+    <!-- <script src="read-test.js"></script> -->
+    <!-- <script src="write-test.js"></script> -->
+    <title>Gini-Index</title>
+    <!-- <meta http-equiv="Access-Control-Allow-Origin" content="*" /> -->
+</head>
+<body>
+    <div class="header">
+
+    </div>
+    <div class="main-content">
+        <div class="sub-content">
+            <h1>Welcome to Gini Database!</h1>
+        </div>
+        <div class="search-bar">
+            <input type="text" name="search" placeholder="Search..">
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $.ajax({
+            // url:'http://localhost:3000/webhdfs/v1/tmp/',
+            url:'http://35.192.142.240:50070/webhdfs/v1/tmp/new-gini-index.txt?op=open',
+            type:'GET',
+            data:'op=open',
+            // dataType: "json",
+            crossDomain:true,
+            success:function(data){
+                console.log(data);
+                //console.log(data.FileStatuses.FileStatus);
+                 
+            },
+            error:function(e){
+                console.log(e.message);
+            }
+        });
+    </script>
+</body>
+</html>
