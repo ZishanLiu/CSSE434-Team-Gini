@@ -8,13 +8,13 @@ pig -x mapreduce recent.pig
 hadoop fs -rm /tmp/gini/output/recent/.pig_schema
 hadoop fs -getmerge /tmp/gini/output/recent ./recent.csv
 
-pig -x mapreduce count_records_by_country
+pig -x mapreduce count_records_by_country.pig
 hadoop fs -rm /tmp/gini/output/records_by_country/.pig_schema
 hadoop fs -getmerge /tmp/gini/output/records_by_country ./records_by_country.csv
 
-pig -x mapreduce count_records_by_year
+pig -x mapreduce count_records_by_year.pig
 hadoop fs -rm /tmp/gini/output/records_by_year/.pig_schema
 hadoop fs -getmerge /tmp/gini/output/records_by_year ./records_by_year.csv
 
-pig -x local -f filter_by.pig -param by=country_name -param value="\'China\'"
-pig -x local -p by=year -p value=2012 filter_by.pig
+pig -x mapreduce -f filter_by.pig -param by=country_name -param value="\'China\'"
+pig -x mapreduce -p by=year -p value=2012 filter_by.pig
