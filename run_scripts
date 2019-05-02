@@ -1,5 +1,12 @@
+#!/bin/bash
+
+rm -rf output
 hadoop fs -rm -r /tmp/gini/output
 hadoop fs -mkdir /tmp/gini/output
+
+pig -x mapreduce -p start_year=2010 -p end_year=2019 scripts/avg_period.pig
+hadoop fs -rm /tmp/gini/output/avg2010/.pig_schema
+hadoop fs -getmerge /tmp/gini/output/avg2010 output/avg2010.csv
 
 pig -x mapreduce -p start_year=2000 -p end_year=2009 scripts/avg_period.pig
 hadoop fs -rm /tmp/gini/output/avg2000/.pig_schema
@@ -13,10 +20,6 @@ pig -x mapreduce -p start_year=1980 -p end_year=1989 scripts/avg_period.pig
 hadoop fs -rm /tmp/gini/output/avg1980/.pig_schema
 hadoop fs -getmerge /tmp/gini/output/avg1980 output/avg1980.csv
 
-pig -x mapreduce -p start_year=2010 -p end_year=2019 scripts/avg_period.pig
-hadoop fs -rm /tmp/gini/output/avg2010/.pig_schema
-hadoop fs -getmerge /tmp/gini/output/avg2010 output/avg2010.csv
-
 pig -x mapreduce scripts/recent.pig
 hadoop fs -rm /tmp/gini/output/recent/.pig_schema
 hadoop fs -getmerge /tmp/gini/output/recent output/recent.csv
@@ -28,6 +31,3 @@ hadoop fs -getmerge /tmp/gini/output/records_by_country output/records_by_countr
 pig -x mapreduce scripts/count_records_by_year.pig
 hadoop fs -rm /tmp/gini/output/records_by_year/.pig_schema
 hadoop fs -getmerge /tmp/gini/output/records_by_year output/records_by_year.csv
-
-//pig -x mapreduce -f filter_by.pig -param by=country_name -param value="\'China\'"
-//pig -x mapreduce -p by=year -p value=2012 filter_by.pig
