@@ -32,10 +32,10 @@
             <h1>Welcome to Gini Database!</h1>
 
         </div>
-        <button class="search-bar" type="button" id="button">
+        <h4 id="view">
             <!-- <input type="text" name="search" placeholder="Search.." id="search"> -->
             View Gini-index in 1980s
-        </button>
+        </h4>
     </div>
     <script>
         /**
@@ -49,8 +49,8 @@
         // import * as d3 from 'd3';
         // require("./stylesheet.css");
 
-        $("#button").click(function() {
-            $("#button").attr("hidden", true);
+        $("#view").click(function() {
+            $("#view").attr("hidden", true);
             var request = new XMLHttpRequest();
             request.open("GET", "avg1980_limited.csv", true);
             // var r = new FileReader();
