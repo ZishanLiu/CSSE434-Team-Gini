@@ -6,6 +6,7 @@ giniData = LOAD 'hdfs:///tmp/gini/input/gini.txt' USING PigStorage('\t') AS (
            value:float
 );
 
+
 -- populationData = LOAD 'hdfs:///tmp/new-gini-index.txt' USING PigStorage('\t') AS (
 --            row_key:chararray,
 --            country_name:chararray,
