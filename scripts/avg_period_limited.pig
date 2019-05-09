@@ -8,4 +8,4 @@ avg = foreach grouped generate group.name as name, AVG(filtered.value) as averag
 sort = ORDER avg by average DESC;
 final = LIMIT sort $number;
 -- DUMP avg
-store final into '/tmp/gini/output/avg${start_year}' using PigStorage(',','-schema');
+store final into '/tmp/gini/output/avg${start_year}_limited' using PigStorage(',','-schema');

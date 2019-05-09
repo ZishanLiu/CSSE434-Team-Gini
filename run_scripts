@@ -20,6 +20,10 @@ pig -x mapreduce -p start_year=1980 -p end_year=1989 scripts/avg_period.pig
 hadoop fs -rm /tmp/gini/output/avg1980/.pig_schema
 hadoop fs -getmerge /tmp/gini/output/avg1980 output/avg1980.csv
 
+pig -x mapreduce -p start_year=1980 -p end_year=1989 -p number=10 scripts/avg_period_limited.pig
+hadoop fs -rm /tmp/gini/output/avg1980_limited/.pig_schema
+hadoop fs -getmerge /tmp/gini/output/avg1980_limited output/avg1980_limited.csv
+
 pig -x mapreduce scripts/recent.pig
 hadoop fs -rm /tmp/gini/output/recent/.pig_schema
 hadoop fs -getmerge /tmp/gini/output/recent output/recent.csv
