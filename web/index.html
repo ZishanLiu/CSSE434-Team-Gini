@@ -55,7 +55,7 @@
             //r.readAsText(this.file[0], config.encoding);
             request.onreadystatechange = function() {
                 //读取完成后，数据保存在对象的result属性中
-                
+                console.log(request.responseText);
                 var data = d3.csvParse(request.responseText);
                 try {
                     draw(data);
