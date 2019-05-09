@@ -1,4 +1,4 @@
-input_file = LOAD 'hdfs:///tmp/gini/input/cleaned/gini.csv' USING PigStorage(',') AS (
+input_file = LOAD '/tmp/gini/input/cleaned/gini.csv' USING PigStorage(',') AS (
            country_name:chararray,
            country_code:chararray,
            year:int,
