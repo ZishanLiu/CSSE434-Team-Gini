@@ -1,4 +1,4 @@
-giniData = LOAD 'hdfs:///tmp/gini/input/cleanedindex.txt' USING PigStorage('\t') AS (
+giniData = LOAD 'hdfs:///tmp/gini/input/gini.txt' USING PigStorage('\t') AS (
            row_key:chararray,
            country_name:chararray,
            country_code:chararray,
@@ -20,7 +20,7 @@ giniData = LOAD 'hdfs:///tmp/gini/input/cleanedindex.txt' USING PigStorage('\t')
 -- Use HBase storage handler to map data from PIG to HBase
 --NOTE: In this case, custno (first unique column) will be considered as row key.
 
-STORE giniData INTO 'hbase://gini_index' USING org.apache.pig.backend.hadoop.hbase.HBaseStorage(
+STORE giniData INTO'hbase://gini' USING org.apache.pig.backend.hadoop.hbase.HBaseStorage(
 'country:country_name
  country:country_code 
  value:year 
