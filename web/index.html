@@ -53,6 +53,9 @@
             request.open("GET", "avg1980_limited.csv", false);
             //var r = new FileReader();
             //r.readAsText(this.file[0], config.encoding);
+            $.get('avg1980_limited.csv', function(data) {
+                alert(data);
+            });
             request.onreadystatechange = function() {
                 //读取完成后，数据保存在对象的result属性中
                 console.log(request.responseText);
