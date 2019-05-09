@@ -20,6 +20,7 @@ hadoop fs -put datasets/cleaned/* /tmp/gini/input/cleaned
 # set up hbase table
 echo -e "disable 'gini'" | hbase shell -n
 echo -e "drop 'gini'" | hbase shell -n
-echo -e "create 'gini','name','code','year','value'" | hbase shell -n
+echo -e "create 'gini','country','value'" | hbase shell -n
+echo -e "enable 'gini'" | hbase shell -n
 # import it to hbase
 pig -x mapreduce -p hdfsinput=/tmp/gini/input/cleaned/gini.csv -p hbaseoutput=hbase://gini scripts/import_to_hbase.pig 
