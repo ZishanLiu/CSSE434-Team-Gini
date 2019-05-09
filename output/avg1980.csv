@@ -1,42 +1,42 @@
-name,average
-Chile,56.20000076293945
-Ghana,35.64999961853027
-Brazil,59.14444478352865
-Canada,31.950000762939453
-Israel,36.5
-Jordan,36.099998474121094
-Mexico,48.900001525878906
-Panama,58.900001525878906
-Rwanda,28.899999618530273
-Turkey,43.5
-Uganda,44.400001525878906
-Algeria,40.20000076293945
-Croatia,22.799999237060547
-Ecuador,50.5
-Hungary,23.0
-Jamaica,43.20000076293945
-Lesotho,56.0
-Morocco,39.20000076293945
-Nigeria,38.70000076293945
-Romania,23.299999237060547
-Tunisia,43.400001525878906
-Uruguay,43.0
-Botswana,54.20000076293945
-Honduras,59.5
-Malaysia,47.266666412353516
-Pakistan,33.29999923706055
-Thailand,44.5
-Argentina,42.96666590372721
-Australia,32.333333333333336
-Guatemala,58.94999885559082
-Sri Lanka,32.5
-Bangladesh,27.1999994913737
-Costa Rica,42.86666742960612
-Madagascar,46.79999923706055
-Mauritania,43.900001525878906
-Cote d'Ivoire,40.22500038146973
-United States,37.5
-"Venezuela, RB",51.43333307902018
-Dominican Republic,49.14999961853027
-Trinidad and Tobago,42.599998474121094
-"Iran, Islamic Rep.",47.400001525878906
+name,value,
+Chile,56.20000076,
+Ghana,35.64999962,
+Brazil,59.14444478,
+Canada,31.95000076,
+Israel,36.5,
+Jordan,36.09999847,
+Mexico,48.90000153,
+Panama,58.90000153,
+Rwanda,28.89999962,
+Turkey,43.5,
+Uganda,44.40000153,
+Algeria,40.20000076,
+Croatia,22.79999924,
+Ecuador,50.5,
+Hungary,23,
+Jamaica,43.20000076,
+Lesotho,56,
+Morocco,39.20000076,
+Nigeria,38.70000076,
+Romania,23.29999924,
+Tunisia,43.40000153,
+Uruguay,43,
+Botswana,54.20000076,
+Honduras,59.5,
+Malaysia,47.26666641,
+Pakistan,33.29999924,
+Thailand,44.5,
+Argentina,42.9666659,
+Australia,32.33333333,
+Guatemala,58.94999886,
+Sri Lanka,32.5,
+Bangladesh,27.19999949,
+Costa Rica,42.86666743,
+Madagascar,46.79999924,
+Mauritania,43.90000153,
+Cote d'Ivoire,40.22500038,
+United States,37.5,
+"Venezuela, RB",51.43333308,
+Dominican Republic,49.14999962,
+Trinidad and Tobago,42.59999847,
+"Iran, Islamic Rep.",47.40000153,
