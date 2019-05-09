@@ -1,30 +1,18 @@
-giniData = LOAD 'hdfs:///tmp/gini/input/gini.txt' USING PigStorage('\t') AS (
-           row_key:chararray,
+input_file = LOAD 'hdfs:///tmp/gini/input/cleaned/gini.csv' USING PigStorage(',') AS (
            country_name:chararray,
            country_code:chararray,
            year:int,
            value:float
 );
+finput = filter input_file by country_name != 'Country Name';
+hinput = foreach finput generate CONCAT(country_code,'_',(chararray)year) as row_key, country_name as name, country_code as code, year as year, value as value;
 
-
--- populationData = LOAD 'hdfs:///tmp/new-gini-index.txt' USING PigStorage('\t') AS (
---            row_key:chararray,
---            country_name:chararray,
---            country_code:chararray,
---            year:int,
---            value:float
--- );
-
--- To dump the data from PIG Storage to stdout
- dump giniData; 
 
 -- Use HBase storage handler to map data from PIG to HBase
---NOTE: In this case, custno (first unique column) will be considered as row key.
 
-STORE giniData INTO'hbase://gini' USING org.apache.pig.backend.hadoop.hbase.HBaseStorage(
+STORE hinput INTO'hbase://gini' USING org.apache.pig.backend.hadoop.hbase.HBaseStorage(
 'country:country_name
  country:country_code 
  value:year 
  value:value'
 );
-
