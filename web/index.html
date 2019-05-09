@@ -49,11 +49,11 @@
 
         $("#view").click(function() {
             $("#view").attr("hidden", true);
-            var request = new XMLHttpRequest();
-            request.open("GET", "avg1980_limited.csv", true);
-            // var r = new FileReader();
-            // r.readAsText(this.files[0], config.encoding);
-            request.onload = function() {
+            // var request = new XMLHttpRequest();
+            // request.open("GET", "avg1980_limited.csv", true);
+            var r = new FileReader();
+            r.readAsText("avg1980_limited.csv", config.encoding);
+            r.onload = function() {
                 //读取完成后，数据保存在对象的result属性中
                 var data = d3.csvParse(this.result);
                 try {
