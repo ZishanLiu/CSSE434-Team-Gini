@@ -4,7 +4,7 @@ records = LOAD 'hbase://gini_index'
         AS (name:chararray, code:chararray, year:int, value:float);
 filtered = FILTER records BY year>=$start_year and year<=$end_year;
 grouped = GROUP filtered BY (name,code);
-avg = foreach grouped generate group.name as name, type, AVG(filtered.value) as value, date;
+avg = foreach grouped generate group.name as name, '0' as type, AVG(filtered.value) as value, $start_year as date;
 sort = ORDER avg by value DESC;
 final = LIMIT sort $number;
 -- DUMP avg
