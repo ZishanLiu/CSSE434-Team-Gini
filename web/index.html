@@ -46,7 +46,7 @@
 
         // import * as d3 from 'd3';
         // require("./stylesheet.css");
-
+        var temp;
         $("#view").click(function() {
             $("#view").attr("hidden", true);
             var request = new XMLHttpRequest();
@@ -54,14 +54,14 @@
             //var r = new FileReader();
             //r.readAsText(this.file[0], config.encoding);
             $.get('avg1980_limited.csv', function(data) {
-                alert(data);
+                temp = d3.csvParse(data);
             });
             request.onreadystatechange = function() {
                 //读取完成后，数据保存在对象的result属性中
-                console.log(request.responseText);
-                var data = d3.csvParse(request.responseText);
+                //console.log(request.responseText);
+                //var data = d3.csvParse(request.responseText);
                 try {
-                    draw(data);
+                    draw(temp);
                 } catch (error) {
                     alert(error);
                 }
