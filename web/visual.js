@@ -9,7 +9,7 @@
 // import * as d3 from 'd3';
 // require("./stylesheet.css");
 
-$("#button").onclick = function () {
+$("#button").click(function () {
   $("#button").attr("hidden", true);
   var request = new XMLHttpRequest();
   request.open("GET", "avg1980_limited.csv", true);
@@ -24,7 +24,7 @@ $("#button").onclick = function () {
       alert(error);
     }
   };
-};
+});
 
 function draw(data) {
   var date = [];
