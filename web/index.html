@@ -620,7 +620,7 @@
                 .call(yAxis)
                 .append("text")
                 .attr("transform", "rotate(0)")
-                .attr("y",50)
+                .attr("y",6)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
                 .text("indices");
@@ -637,12 +637,12 @@
                 .on('mouseout', tip.hide)
         });
     
+            function type(d) {
+            d.$1 = +d.$1;
+            return d;
+            }
         });
     
-        function type(d) {
-          d.$1 = +d.$1;
-          return d;
-        }
     
       </script>
 </body>
