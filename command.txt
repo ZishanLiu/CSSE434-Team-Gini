@@ -1,1 +1,1 @@
-./importData.sh datasets/input/raw/gini.csv
+./importData.sh datasets/raw/gini-index.csv
