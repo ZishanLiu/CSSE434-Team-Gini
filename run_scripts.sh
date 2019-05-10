@@ -11,8 +11,8 @@ hadoop fs -mkdir $2
 # pig -x mapreduce -p hbaseInput=$1 -p hdfsOutput=$2 -p start_year=2010 -p end_year=2019 scripts/avg_period.pig
 # hadoop fs -rm /tmp/gini/output/avg2010/.pig_schema
 # hadoop fs -getmerge /tmp/gini/output/avg2010 output/avg2010.csv
-start="1980"
-num="10"
+start=1980
+num=10
 while [${start} -le 1990]
 do
     (($end = $start+4))
