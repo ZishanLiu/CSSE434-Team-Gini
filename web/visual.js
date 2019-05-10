@@ -9,14 +9,12 @@
 // import * as d3 from 'd3';
 // require("./stylesheet.css");
 
-$("#button").click(function () {
-  $("#button").attr("hidden", true);
-  var request = new XMLHttpRequest();
-  request.open("GET", "avg1980_limited.csv", true);
-  // var r = new FileReader();
-  // r.readAsText(this.files[0], config.encoding);
-  request.onload = function () {
-    //读取完成后，数据保存在对象的result属性中
+$("#inputfile").change(function () {
+  $("#inputfile").attr("hidden", true);
+  var r = new FileReader();
+  r.readAsText(this.files[0], config.encoding);
+  r.onload = function () {
+     
     var data = d3.csvParse(this.result);
     try {
       draw(data);

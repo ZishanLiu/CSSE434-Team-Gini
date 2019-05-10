@@ -1,0 +1,1 @@
+cp /web/* /var/www/html/

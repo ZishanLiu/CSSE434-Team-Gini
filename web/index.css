@@ -9,6 +9,8 @@ body {
     
 }
 
+
+
 h1 {
     font-size: 50px;
     position: absolute;
@@ -27,6 +29,15 @@ h4 {
     left: 50%;
 }
 
+input {
+        font-size: 30px;
+        position: absolute;
+    
+        transform: translate(-50%,-50%);
+        top: 70%;
+        left: 50%;
+     
+}
 
 .search-bar {
     position: absolute;
@@ -35,7 +46,7 @@ h4 {
     left: 50%;
 }
 
-input[type=text] {
+/* input[type=text] {
     width: 130px;
     box-sizing: border-box;
     border: 2px solid #ccc;
@@ -51,4 +62,4 @@ input[type=text] {
   
   input[type=text]:focus {
     width: 100%;
-  }
+  } */
