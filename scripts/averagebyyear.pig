@@ -1,3 +1,4 @@
+-- not used now
 data = LOAD 'hbase://gini_index' USING org.apache.pig.backend.hadoop.hbase.HBaseStorage(
 'country:name
  country:code

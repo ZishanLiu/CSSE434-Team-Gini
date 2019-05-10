@@ -1,3 +1,4 @@
+-- not used now
 records = LOAD '${hbaseInput}'
         USING org.apache.pig.backend.hadoop.hbase.HBaseStorage(
         'country:name country:code value:year value:value', '-loadKey false') 

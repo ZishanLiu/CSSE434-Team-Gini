@@ -1,8 +1,8 @@
 #!/bin/bash          
  
 # $1 = hbase input hbase://gini
-# $2 = hdfs output /tmp/gini/output
-# $3 = local output output
+# $2 = hdfs output /tmp/gini/RealOutput
+# $3 = local output RealOutput
 
 # rm -rf $3
 # mkdir $3
@@ -26,15 +26,18 @@ do
     start=$((start + 5))
 done
 
+head -1 1980*top*.csv > top.csv
+for filename in $(ls *top*.csv); do sed 1d $filename >> top.csv; done
+head -1 1980*low*.csv > low.csv
+for filename in $(ls *low*.csv); do sed 1d $filename >> low.csv; done
 
+pig -x mapreduce -p hbaseInput=$1 -p hdfsOutput=$2 scripts/recent.pig
+hadoop fs -rm "${2}/recent/.pig_schema"
+hadoop fs -getmerge "${2}/recent" "${3}/recent.csv"
 
-# pig -x mapreduce -p hbaseInput=$1 -p hdfsOutput=$2 scripts/recent.pig
-# hadoop fs -rm "${2}/recent/.pig_schema"
-# hadoop fs -getmerge "${2}/recent" "${3}/recent.csv"
-
-# pig -x mapreduce -p hbaseInput=$1 -p hdfsOutput=$2 scripts/count_records_by_year.pig
-# hadoop fs -rm "${2}/records_by_year/.pig_schema" 
-# hadoop fs -getmerge "${2}/records_by_year" "${3}/records_by_year.csv"
+pig -x mapreduce -p hbaseInput=$1 -p hdfsOutput=$2 scripts/count_records_by_year.pig
+hadoop fs -rm "${2}/records_by_year/.pig_schema" 
+hadoop fs -getmerge "${2}/records_by_year" "${3}/records_by_year.csv"
 
 
 # below are not used for now
