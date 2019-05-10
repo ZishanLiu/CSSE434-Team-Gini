@@ -1,1 +1,2 @@
 ./importData.sh datasets/raw/gini-index.csv
+./run_scripts hbase://gini /tmp/gini/testOutput testOutput

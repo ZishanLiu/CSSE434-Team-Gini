@@ -1,9 +1,10 @@
 #!/bin/bash          
 
-# $1 = hbase input hbase://gini_index
+# $1 = hbase input hbase://gini
 # $2 = hdfs output /tmp/gini/output
 # $3 = local output output
 rm -rf $3
+mkdir $3
 hadoop fs -rm -r $2
 hadoop fs -mkdir $2
 # change all 4 average_period
