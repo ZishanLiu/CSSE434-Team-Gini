@@ -5,8 +5,8 @@
 # $3 = local output output
 rm -rf $3
 mkdir $3
-hadoop fs -rm -r $2
-hadoop fs -mkdir $2
+hadoop fs -rm -r $2;
+hadoop fs -mkdir $2;
 # change all 4 average_period
 # pig -x mapreduce -p hbaseInput=$1 -p hdfsOutput=$2 -p start_year=2010 -p end_year=2019 scripts/avg_period.pig
 # hadoop fs -rm /tmp/gini/output/avg2010/.pig_schema
@@ -16,10 +16,10 @@ num=10
 while [ $start -le 1990 ]
 do
     (($end = $start+4))
-    pig -x mapreduce -p start_year=${start} -p end_year=${end} -p number=${num} -p hbaseInput=$1 -p hdfsOutput=$2 scripts/highest_between.pig
-    pig -x mapreduce -p start_year=${start} -p end_year=${end} -p number=${num} -p hbaseInput=$1 -p hdfsOutput=$2 scripts/lowest_between.pig
-    hadoop fs -rm "${2}/${start}_${end}top${num}/.pig_schema"
-    hadoop fs -getmerge "${2}/${start}_${end}top${num}" "${3}/${start}_${end}top${num}.csv"
+    pig -x mapreduce -p start_year=${start} -p end_year=${end} -p number=${num} -p hbaseInput=$1 -p hdfsOutput=$2 scripts/highest_between.pig;
+    pig -x mapreduce -p start_year=${start} -p end_year=${end} -p number=${num} -p hbaseInput=$1 -p hdfsOutput=$2 scripts/lowest_between.pig;
+    hadoop fs -rm "${2}/${start}_${end}top${num}/.pig_schema";
+    hadoop fs -getmerge "${2}/${start}_${end}top${num}" "${3}/${start}_${end}top${num}.csv";
     (($start+=5))
 done
 
