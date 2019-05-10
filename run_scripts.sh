@@ -13,7 +13,7 @@ hadoop fs -mkdir $2
 # hadoop fs -getmerge /tmp/gini/output/avg2010 output/avg2010.csv
 start=1980
 num=10
-while [${start} -le 1990]
+while [ $start -le 1990 ]
 do
     (($end = $start+4))
     pig -x mapreduce -p start_year=${start} -p end_year=${end} -p number=${num} -p hbaseInput=$1 -p hdfsOutput=$2 scripts/highest_between.pig
