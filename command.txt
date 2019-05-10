@@ -1,2 +1,3 @@
 ./importData.sh datasets/raw/gini-index.csv
-./run_scripts hbase://gini /tmp/gini/testOutput testOutput
+chmod +x run_scripts.sh 
+./run_scripts.sh hbase://gini /tmp/gini/testOutput testOutput
