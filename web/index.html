@@ -623,13 +623,13 @@
                 .attr("y", 6)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
-                .text("user per million people");
+                .text("indices");
         
             svg.selectAll(".bar")
                 .data(data)
                 .enter().append("rect")
                 .attr("class", "bar")
-                .attr("x", function (d) { return x(d.Country); })
+                .attr("x", function (d) { return x(d.group); })
                 .attr("width", x.rangeBand())
                 .attr("y", function (d) { return y(d.$1); })
                 .attr("height", function (d) { return height - y(d.$1); })
