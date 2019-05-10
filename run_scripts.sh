@@ -20,7 +20,7 @@ do
     pig -x mapreduce -p start_year=${start} -p end_year=${end} -p number=${num} -p hbaseInput=$1 -p hdfsOutput=$2 scripts/lowest_between.pig;
     hadoop fs -rm "${2}/${start}_${end}top${num}/.pig_schema";
     hadoop fs -getmerge "${2}/${start}_${end}top${num}" "${3}/${start}_${end}top${num}.csv";
-    start = ((start + 5));
+    start = $((start + 5));
 done
 
 # pig -x mapreduce -p start_year=1980 -p end_year=1989 -p number=10 -p hbaseInput=hbase://gini_index -p hdfsOutput=/tmp/gini/output scripts/avg_period_limited.pig
