@@ -1,5 +1,5 @@
 #!/bin/bash          
-
+ 
 # $1 = hbase input hbase://gini
 # $2 = hdfs output /tmp/gini/output
 # $3 = local output output
