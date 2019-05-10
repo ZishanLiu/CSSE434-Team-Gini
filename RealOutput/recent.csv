@@ -1,14 +1,4 @@
 country,value
-"Congo, Dem. Rep.",42.1
-"Congo, Rep.",48.9
-"Egypt, Arab Rep.",31.8
-"Gambia, The",35.9
-"Iran, Islamic Rep.",38.8
-"Korea, Rep.",31.6
-"Macedonia, FYR",35.6
-"Micronesia, Fed. Sts.",40.1
-"Venezuela, RB",46.9
-"Yemen, Rep.",36.7
 Albania,29.0
 Algeria,27.6
 Angola,42.7
@@ -39,6 +29,8 @@ Chile,47.7
 China,42.2
 Colombia,50.8
 Comoros,45.3
+Congo  Dem. Rep.,42.1
+Congo  Rep.,48.9
 Costa Rica,48.7
 Cote d'Ivoire,41.5
 Croatia,31.1
@@ -48,6 +40,7 @@ Denmark,28.2
 Djibouti,44.1
 Dominican Republic,45.3
 Ecuador,45.0
+Egypt  Arab Rep.,31.8
 El Salvador,40.0
 Estonia,32.7
 Eswatini,51.5
@@ -56,6 +49,7 @@ Fiji,36.7
 Finland,27.1
 France,32.7
 Gabon,38.0
+Gambia  The,35.9
 Georgia,36.5
 Germany,31.7
 Ghana,42.4
@@ -70,6 +64,7 @@ Hungary,30.4
 Iceland,27.8
 India,35.1
 Indonesia,39.5
+Iran  Islamic Rep.,38.8
 Iraq,29.5
 Ireland,31.8
 Israel,41.4
@@ -80,6 +75,7 @@ Jordan,33.7
 Kazakhstan,26.9
 Kenya,40.8
 Kiribati,37.0
+Korea  Rep.,31.6
 Kosovo,26.5
 Kyrgyz Republic,26.8
 Lao PDR,36.4
@@ -89,6 +85,7 @@ Lesotho,54.2
 Liberia,33.2
 Lithuania,37.4
 Luxembourg,33.8
+Macedonia  FYR,35.6
 Madagascar,42.6
 Malawi,45.5
 Malaysia,41.0
@@ -98,6 +95,7 @@ Malta,29.4
 Mauritania,32.6
 Mauritius,35.8
 Mexico,43.4
+Micronesia  Fed. Sts.,40.1
 Moldova,26.3
 Mongolia,32.3
 Montenegro,31.9
@@ -156,7 +154,9 @@ United States,41.5
 Uruguay,39.7
 Uzbekistan,35.3
 Vanuatu,37.6
+Venezuela  RB,46.9
 Vietnam,35.3
 West Bank and Gaza,33.7
+Yemen  Rep.,36.7
 Zambia,57.1
 Zimbabwe,43.2
