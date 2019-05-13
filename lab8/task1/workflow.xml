@@ -1,0 +1,21 @@
+<workflow-app name="mapreduce" xmlns="uri:oozie:workflow:0.4">
+    <start to="mapreduce"/>
+    <action name="mapreduce">
+        <java>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <prepare>
+                  <delete path="${nameNode}/tmp/mapredOutput/"/>
+            </prepare>
+            <main-class>edu.rosehulman.wangc6.FriendList</main-class>
+            <arg>${nameNode}/tmp/mapredInput/nameSample.txt</arg>
+            <arg>${nameNode}/tmp/mapredOutput/</arg>
+        </java>
+        <ok to="end"/>
+        <error to="kill"/>
+    </action>
+    <kill name="kill">
+        <message>Action failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+    <end name="end"/>
+</workflow-app>
