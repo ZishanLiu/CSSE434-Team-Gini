@@ -1,11 +1,11 @@
 <workflow-app name="sample-wf" xmlns="uri:oozie:workflow:0.4">
     <start to="sqoopJob"/>
     <action name="sqoopJob">
-        <sqoop xmlns="uri:oozie:sqoop-action:0.4">
+        <sqoop xmlns="uri:oozie:sqoop-action:0.2">
             <job-tracker>${jobTracker}</job-tracker>
             <name-node>${nameNode}</name-node>
             <job-xml>/tmp/shared/hive-site.xml</job-xml>
-            <command>export --connect jdbc:mysql://10.128.0.2:3306/lab8 --username hive --password password123 -m 1 --table task2 --export-dir ${nameNode}/tmp/lab8/task2 --input-fields-terminated-by ,</command>
+            <command>export --connect jdbc:mysql://10.128.0.2:3306/lab8 --username hive --password password123 -m 1 --table task2 --export-dir ${nameNode}/tmp/lab8/task2/ --input-fields-terminated-by ,</command>
 	    </sqoop>
         <ok to="end"/>
         <error to="kill"/>
