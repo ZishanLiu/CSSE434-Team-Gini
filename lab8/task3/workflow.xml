@@ -19,12 +19,13 @@
             <job-tracker>${jobTracker}</job-tracker>
             <name-node>${nameNode}</name-node>
               <job-xml>/tmp/shared/hive-site.xml</job-xml>
-	<jdbc-url>jdbc:hive2://10.128.0.7:10000</jdbc-url>
-	<password>hivepassword</password>
-            <script>/tmp/shared/scripts/createTable.hql</script>
-              <param>databaseName=${databaseName}</param>
-              <param>tableName=${tableName}</param>
-              <param>ORCTableName=${ORCTableName}</param>
+	<jdbc-url>jdbc:hive2://10.128.0.2:10000</jdbc-url>
+	<password>password123</password>
+            <script>/tmp/lab8/task3/createDatabase.hql</script>
+              <param>tableName=${tableName}</param> 
+              <param>databaseName=${databaseName}</param> 
+              <param>pigOutputDir=${PigOutputPath}</param>
+              <param>jobDate=${jobDate}</param>
         </hive2>
         <ok to="HiveLoad"/>
         <error to="kill"/>
@@ -34,13 +35,15 @@
             <job-tracker>${jobTracker}</job-tracker>
             <name-node>${nameNode}</name-node>
               <job-xml>/tmp/shared/hive-site.xml</job-xml>
-	<jdbc-url>jdbc:hive2://10.128.0.7:10000</jdbc-url>
-	<password>hivepassword</password>
-            <script>/tmp/shared/scripts/loadTable.hql</script>
-              <param>databaseName=${databaseName}</param>
-              <param>tableName=${tableName}</param>
-              <param>ORCTableName=${ORCTableName}</param>
-              <param>PigOutputPath=${PigOutputPath}</param>
+	<jdbc-url>jdbc:hive2://10.128.0.2:10000</jdbc-url>
+	<password>password123</password>
+            <script>/tmp/lab8/task3/createTable.hql</script>
+              <param>tableName=${tableName}</param> 
+              <param>tableName2=${tableName2}</param> 
+              <param>year=${year}</param>
+              <param>month=${month}</param>
+              <param>day=${day}</param>
+              <param>hour=${hour}</param>
         </hive2>
         <ok to="end"/>
         <error to="kill"/>
