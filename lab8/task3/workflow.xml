@@ -20,6 +20,7 @@
             <name-node>${nameNode}</name-node>
               <job-xml>/tmp/shared/hive-site.xml</job-xml>
 	<jdbc-url>jdbc:hive2://10.128.0.2:10000</jdbc-url>
+    <user>hive</user>
 	<password>password123</password>
             <script>/tmp/lab8/task3/createDatabase.hql</script>
               <param>tableName=${tableName}</param> 
