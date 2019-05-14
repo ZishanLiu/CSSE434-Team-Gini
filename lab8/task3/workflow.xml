@@ -1,5 +1,52 @@
-<workflow-app name ="task3" xmlns="uri:oozie:workflow:0:5">
-  <start to="PigAction"/>
-  <action name="PigAction">
-    <pig>
-      <job 
+<workflow-app name="PigHiveBeeline" xmlns="uri:oozie:workflow:0.4">
+    <start to="PigAction"/>
+    <action name="PigAction">
+        <pig>
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <prepare>
+                  <delete path="${PigOutputPath}"/>
+            </prepare>
+            <script>/tmp/lab8/task3/task4.pig</script>
+              <param>input=${PigInputPath}</param>
+              <param>output=${PigOutputPath}</param>
+        </pig>
+        <ok to="HiveCreate"/>
+        <error to="kill"/>
+    </action>
+    <action name="HiveCreate">
+        <hive2 xmlns="uri:oozie:hive2-action:0.1">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+              <job-xml>/tmp/shared/hive-site.xml</job-xml>
+	<jdbc-url>jdbc:hive2://10.128.0.7:10000</jdbc-url>
+	<password>hivepassword</password>
+            <script>/tmp/shared/scripts/createTable.hql</script>
+              <param>databaseName=${databaseName}</param>
+              <param>tableName=${tableName}</param>
+              <param>ORCTableName=${ORCTableName}</param>
+        </hive2>
+        <ok to="HiveLoad"/>
+        <error to="kill"/>
+    </action>
+    <action name="HiveLoad">
+        <hive2 xmlns="uri:oozie:hive2-action:0.1">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+              <job-xml>/tmp/shared/hive-site.xml</job-xml>
+	<jdbc-url>jdbc:hive2://10.128.0.7:10000</jdbc-url>
+	<password>hivepassword</password>
+            <script>/tmp/shared/scripts/loadTable.hql</script>
+              <param>databaseName=${databaseName}</param>
+              <param>tableName=${tableName}</param>
+              <param>ORCTableName=${ORCTableName}</param>
+              <param>PigOutputPath=${PigOutputPath}</param>
+        </hive2>
+        <ok to="end"/>
+        <error to="kill"/>
+    </action>
+    <kill name="kill">
+        <message>Action failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+    <end name="end"/>
+</workflow-app>

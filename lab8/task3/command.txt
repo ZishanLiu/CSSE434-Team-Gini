@@ -1,0 +1,4 @@
+//hadoop fs -mkdir /tmp/wangc6/
+hadoop fs -put sample.gz *.txt *.jar /tmp/wangc6/
+pig -x mapreduce -p input=/tmp/wangc6/sample.gz -p output=/tmp/wangc6/output task4.pig 
+hadoop fs -cat /tmp/wangc6/output/2019-04-24/part-r-00000
