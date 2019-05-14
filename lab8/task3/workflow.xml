@@ -38,6 +38,7 @@
 	<jdbc-url>jdbc:hive2://10.128.0.2:10000</jdbc-url>
 	<password>password123</password>
             <script>/tmp/lab8/task3/createTable.hql</script>
+              <param>databaseName=${databaseName}</param> 
               <param>tableName=${tableName}</param> 
               <param>tableName2=${tableName2}</param> 
               <param>year=${year}</param>
