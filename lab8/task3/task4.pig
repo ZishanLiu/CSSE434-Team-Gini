@@ -20,4 +20,5 @@ error_count = FOREACH grouped_error GENERATE group as name, COUNT(error_records.
 join_both_records = JOIN join_hit_records by total_count::name LEFT OUTER, error_count by name;
 result = FOREACH join_both_records GENERATE total_count::name as name, DIVIDE(hits,total) as hit_rate, DIVIDE(errors,total) as error_rate,
 GetYear(CurrentTime()) as year, GetMonth(CurrentTime()) as month, GetDay(CurrentTime()) as date, GetHour(CurrentTime()) as hour;
+dump result;
 STORE result into '$output/$DATETIME/' using PigStorage('\t');
