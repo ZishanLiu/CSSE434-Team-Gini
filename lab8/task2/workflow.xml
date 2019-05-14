@@ -1,4 +1,4 @@
-<workflow-app name="sample-wf" xmlns="uri:oozie:workflow:0.4">
+<workflow-app name="task2" xmlns="uri:oozie:workflow:0.4">
     <start to="sqoopJob"/>
     <action name="sqoopJob">
         <sqoop xmlns="uri:oozie:sqoop-action:0.4">
