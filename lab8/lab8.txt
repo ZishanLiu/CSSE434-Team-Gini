@@ -6,8 +6,10 @@ hadoop fs -rm -r /tmp/deploy/task2/
 hadoop fs -mkdir /tmp/deploy/task2
 hadoop fs -put * /tmp/deploy/task2/
 oozie job -oozie http://10.128.0.2:11000/oozie -config job.properties -run
-hadoop fs -ls /tmp/lab8/task2
+mysql -u hive -p
 
+hadoop fs -rm -r /tmp/deploy/task3/
+hadoop fs -mkdir /tmp/deploy/task3
+hadoop fs -put * /tmp/deploy/task3/
 oozie job -oozie http://10.128.0.2:11000/oozie -config job.properties -run
-beeline -u jdbc:hive2://10.128.0.2:10000 -n hive -p password123 
 
