@@ -861,7 +861,7 @@ $('#view').click(function(){
         return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
     })
     $("#view").attr("hidden", true);
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("#barChart").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -869,7 +869,7 @@ $('#view').click(function(){
 
     svg.call(tip);
 
-    d3.csv("example.csv", type, function (error, data) {
+    d3.csv("records_by_year.csv", type, function (error, data) {
     x.domain(data.map(function (d) { return d.group; }));
     y.domain([0, d3.max(data, function (d) { return d.$1; })]);
 
@@ -902,9 +902,12 @@ $('#view').click(function(){
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide)
 });
-
     function type(d) {
     d.$1 = +d.$1;
     return d;
     }
+});
+
+$('body').click( function () { 
+  window.location.reload();
 });
