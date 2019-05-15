@@ -19,6 +19,7 @@ h1 {
 
 .sub-content2{
     display: flex;
+    position: absolute;
     font-size: 20px;
     transform: translate(-50%,-50%);
     top: 50%;
