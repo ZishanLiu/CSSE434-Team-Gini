@@ -17,6 +17,11 @@ h1 {
     left: 50%;
 }
 
+.sub-content2{
+    display: flex;
+    font-size: 50px;
+    transform: translate(-50%,-50%);
+}
 
 input {
         font-size: 30px;
