@@ -908,6 +908,6 @@ $('#view').click(function(){
     }
 });
 
-$('body').click( function () { 
+$('#barChart').click( function () { 
   window.location.reload();
 });
