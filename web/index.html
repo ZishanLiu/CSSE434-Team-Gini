@@ -11,7 +11,7 @@
             </label>
             <nav>
                 <a id="view1">View Gini Indices!</a>
-                <a id="view2">View Top Indices!</a>
+                <input type="file" id="inputfile" name="fileContent">
                 <a id="view3">View other 1</a>
                 <a id="view4">View other 2</a>
             </nav>
@@ -79,7 +79,7 @@
     }
     
     .header-left {
-      margin-top: 5%;
+      margin-top: 3%;
         width: 30%;
     }
     
@@ -127,16 +127,20 @@
     }
     
     h1 {
-        font-weight: 300;
+       font-style: italic;
+        font-size: 30px;
         line-height: 40px;
+        font-weight: bold;
     }
     
     a {
+        font-size:20px;
         text-decoration: none;
         color: black;
     }
     
     nav>a {
+
         position: relative;
         display: inline-block;
         font-size: 13px;
@@ -911,6 +915,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="config.js"></script>
+    <script src="imgs.js"></script>
+    <script src="color_ranges.js"></script>
+    <script src="visual.js"></script>
+    <link rel="stylesheet" href="stylesheet.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
     <title>Gini-index</title>
 </head>
 

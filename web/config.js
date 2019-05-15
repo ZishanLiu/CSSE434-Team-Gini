@@ -9,7 +9,7 @@
   encoding: "UTF-8",
 
   // 每个时间节点最多显示的条目数。
-  max_number: 20,
+  max_number: 100,
 
   // 控制是否显示顶部附加信息文字。
   showMessage: true,
@@ -54,10 +54,10 @@
 
   // 附加信息内容。
   // left label
-  itemLabel: "左侧文字",
+  itemLabel: "Country",
 
   // right label
-  typeLabel: "右侧文字",
+  typeLabel: "Index",
 
 
   // 榜首项目信息的水平位置 。
@@ -140,10 +140,10 @@
   wait: 0,
 
   // 单独控制交换动画速度倍率
-  update_rate: 0.0,
+  update_rate: 1,
 
   // 开启匀速动画效果
-  animation:'linear',
+  // animation:'linear',
   showLabel: false,
 
   // label x轴位置
