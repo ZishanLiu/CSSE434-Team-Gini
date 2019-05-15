@@ -714,7 +714,7 @@
     </script>
     <script>
         $('#view3').click(function() {
-            $('svg').empty();
+            $(".main-content").empty();
             var margin = {
                     top: 40,
                     right: 20,
@@ -748,7 +748,7 @@
                     return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
                 })
 
-            var svg = d3.select("body").append("svg")
+            var svg = d3.select(".main-content").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
@@ -809,7 +809,7 @@
     </script>
     <script>
         $('#view4').click(function() {
-            $('svg').empty();
+            $(".main-content").empty();
             var margin = {
                     top: 40,
                     right: 20,
@@ -843,7 +843,7 @@
                     return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
                 })
 
-            var svg = d3.select("body").append("svg")
+            var svg = d3.select(".main-content").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
