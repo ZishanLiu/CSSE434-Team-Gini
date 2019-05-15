@@ -54,7 +54,7 @@ function draw(data) {
     });
   var baseTime = 3000;
 
-  // 选择颜色
+
   function getColor(d) {
     var r = 0.0;
     if (changeable_color) {
@@ -345,11 +345,7 @@ function draw(data) {
 
   function redraw() {
     if (currentData.length == 0) return;
-    // yScale
-    //     .domain(currentData.map(d => d.name).reverse())
-    //     .range([innerHeight, 0]);
-    // x轴范围
-    // 如果所有数字很大导致拉不开差距
+    
 
     if (big_value) {
       xScale
@@ -363,28 +359,6 @@ function draw(data) {
         .domain([0, d3.max(currentData, xValue) + 1])
         .range([0, innerWidth]);
     }
-    // if (auto_sort) {
-    //   dateLabel
-    //     .data(currentData)
-    //     .transition()
-    //     .duration(baseTime * interval_time)
-    //     .ease(d3.easeLinear)
-    //     .tween("text", function (d) {
-    //       var self = this;
-    //       var i = d3.interpolateDate(
-    //         new Date(self.textContent),
-    //         new Date(d.date)
-    //       );
-    //       // var prec = (new Date(d.date) + "").split(".");
-    //       // var round = (prec.length > 1) ? Math.pow(10, prec[1].length) : 1;
-    //       // return function (t) {
-    //       //   var dateformat = d3.timeFormat(timeFormat);
-    //       //   self.textContent = dateformat(i(t));
-    //       // };
-    //     });
-    // } else {
-    //   dateLabel.text(currentdate);
-    // }
 
     xAxisG
       .transition()
@@ -622,7 +596,6 @@ function draw(data) {
         .duration(2990 * interval_time)
         .tween("text", function (d) {
           var self = this;
-          // 初始值为d.value的0.9倍
           self.textContent = d.value * 0.9;
           var i = d3.interpolate(self.textContent, Number(d.value)),
             prec = (Number(d.value) + "").split("."),
@@ -856,8 +829,82 @@ function draw(data) {
       window.clearInterval(inter);
     }
   }, baseTime * interval_time);
-  // setInterval(() => {
-  //     d3.transition()
-  //         .each(change)
-  // }, baseTime * update_rate * interval_time)
+
 }
+
+$('#view').click(function(){
+    var margin = { top: 40, right: 20, bottom: 30, left: 140 },
+    width = 900 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+    var formatPercent = d3.format(".0%");
+
+    var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+    var y = d3.scale.linear()
+    .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+    // .tickFormat(formatPercent);
+
+    var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    .html(function (d) {
+        return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
+    })
+    $("#view").attr("hidden", true);
+    var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.call(tip);
+
+    d3.csv("example.csv", type, function (error, data) {
+    x.domain(data.map(function (d) { return d.group; }));
+    y.domain([0, d3.max(data, function (d) { return d.$1; })]);
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+
+        .selectAll("text")
+        .attr("transform", "rotate(10)");
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(0)")
+        .attr("y",6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("indices");
+
+    svg.selectAll(".bar")
+        .data(data)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function (d) { return x(d.group); })
+        .attr("width", x.rangeBand())
+        .attr("y", function (d) { return y(d.$1); })
+        .attr("height", function (d) { return height - y(d.$1); })
+        .on('mouseover', tip.show)
+        .on('mouseout', tip.hide)
+});
+
+    function type(d) {
+    d.$1 = +d.$1;
+    return d;
+    }
+});
