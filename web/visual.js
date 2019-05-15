@@ -14,7 +14,7 @@ $("#inputfile").change(function () {
   var r = new FileReader();
   r.readAsText(this.files[0], config.encoding);
   r.onload = function () {
-     
+    //读取完成后，数据保存在对象的result属性中
     var data = d3.csvParse(this.result);
     try {
       draw(data);
@@ -54,7 +54,7 @@ function draw(data) {
     });
   var baseTime = 3000;
 
-
+  // 选择颜色
   function getColor(d) {
     var r = 0.0;
     if (changeable_color) {
@@ -196,11 +196,11 @@ function draw(data) {
     dateLabel_x = innerWidth; //默认
     dateLabel_y = innerHeight; //默认
   } //是否隐藏
-  if (dateLabel_switch == false) {
+  // if (dateLabel_switch == false) {
     dateLabel_switch = "hidden";
-  } else {
-    dateLabel_switch = "hidden";
-  }
+  // } else {
+  //   dateLabel_switch = "visible";
+  // }
 
   var dateLabel = g
     .insert("text")
@@ -345,7 +345,11 @@ function draw(data) {
 
   function redraw() {
     if (currentData.length == 0) return;
-    
+    // yScale
+    //     .domain(currentData.map(d => d.name).reverse())
+    //     .range([innerHeight, 0]);
+    // x轴范围
+    // 如果所有数字很大导致拉不开差距
 
     if (big_value) {
       xScale
@@ -358,6 +362,28 @@ function draw(data) {
       xScale
         .domain([0, d3.max(currentData, xValue) + 1])
         .range([0, innerWidth]);
+    }
+    if (auto_sort) {
+      dateLabel
+        .data(currentData)
+        .transition()
+        .duration(baseTime * interval_time)
+        .ease(d3.easeLinear)
+        .tween("text", function (d) {
+          var self = this;
+          var i = d3.interpolateDate(
+            new Date(self.textContent),
+            new Date(d.date)
+          );
+          // var prec = (new Date(d.date) + "").split(".");
+          // var round = (prec.length > 1) ? Math.pow(10, prec[1].length) : 1;
+          return function (t) {
+            var dateformat = d3.timeFormat(timeFormat);
+            self.textContent = dateformat(i(t));
+          };
+        });
+    } else {
+      dateLabel.text(currentdate);
     }
 
     xAxisG
@@ -596,6 +622,7 @@ function draw(data) {
         .duration(2990 * interval_time)
         .tween("text", function (d) {
           var self = this;
+          // 初始值为d.value的0.9倍
           self.textContent = d.value * 0.9;
           var i = d3.interpolate(self.textContent, Number(d.value)),
             prec = (Number(d.value) + "").split("."),
@@ -829,5 +856,8 @@ function draw(data) {
       window.clearInterval(inter);
     }
   }, baseTime * interval_time);
-
+  // setInterval(() => {
+  //     d3.transition()
+  //         .each(change)
+  // }, baseTime * update_rate * interval_time)
 }
