@@ -10,10 +10,10 @@
         <span class="hidden-desktop"></span>
       </label>
       <nav>
-        <a href="index.html">View Gini Indices!</a>
-        <a href="user_per_people.html">View Top Indices!</a>
-        <a href="user_per_people.html">View other 1</a>
-        <a href="contribution_pie.html">View other 2</a>
+        <a id="view1">View Gini Indices!</a>
+        <a id="view2">View Top Indices!</a>
+        <a id="view3">View other 1</a>
+        <a id="view4">View other 2</a>
       </nav>
     </div>
   </div>
@@ -553,6 +553,7 @@
   <script src="d3.v3.min.js"></script>
   <script src="d3.tip.v0.6.3.js"></script>
   <script>
+    $('#view1').click(function(){
 
     var margin = { top: 40, right: 20, bottom: 30, left: 140 },
       width = 900 - margin.left - margin.right,
@@ -629,7 +630,7 @@
       d.$1 = +d.$1;
       return d;
     }
-
+  });
   </script>
 </body>
 <html>
