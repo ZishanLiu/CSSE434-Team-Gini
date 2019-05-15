@@ -124,7 +124,7 @@ function draw(data) {
     bottom: bottom_margin
   };
   var background_color = config.background_color;
- 
+  $('.main-content').empty();
   d3.select(".main-content").attr("style", "background:" + background_color);
 
   var enter_from_0 = config.enter_from_0;
