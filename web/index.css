@@ -17,14 +17,6 @@ h1 {
     left: 50%;
 }
 
-h4 {
-    font-size: 30px;
-    position: absolute;
-
-    transform: translate(-50%,-50%);
-    top: 70%;
-    left: 50%;
-}
 
 input {
         font-size: 30px;
