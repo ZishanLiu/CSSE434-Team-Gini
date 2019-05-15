@@ -1,925 +1,646 @@
 <!DOCTYPE html>
-<html lang="en">
+<meta charset="utf-8">
+<header class="clearfix">
+  <div class="container">
+    <div class="header-left">
+      <h1>User By Country</h1>
+    </div>
+    <div class="header-right">
+      <label for="open">
+        <span class="hidden-desktop"></span>
+      </label>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="user_per_people.html">User Distribution</a>
+        <a href="user_per_people.html">User Density</a>
+        <a href="contribution_pie.html">Contribution</a>
+      </nav>
+    </div>
+  </div>
+</header>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+    -webkit-box-sizing: border-box;
+  }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href="index.css">
-    <link rel="stylesheet" href="stylesheet.css">
+  *:before,
+  *:after {
+    -webkit-box-sizing: border-box;
+  }
 
-    <meta name="viewport" content="width=device-width">
-    <script src="jquery-3.2.1.slim.min.js"></script>
-    <script src="d3.v5.min.js"></script>
-    <script src="d3.v3.min.js"></script>
-    <script src="d3.tip.v0.6.3.js"></script>
-    <title>Gini-Index</title>
+  .clearfix {
+    *zoom: 1;
+  }
 
-    <svg width="1900" height="1020"></svg>
-    <script src="imgs.js"></script>
-    <script src="color_ranges.js"></script>
-    <script src="visual.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-</head>
+  html {
+    font-family: Helvetica, arial, sans-serif;
+    font-size: 12px;
+  }
+
+  body {
+    background: url('brushed_alu.png');
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    line-height: 0;
+    content: "";
+  }
+
+  .clearfix:after {
+    clear: both;
+  }
+
+  .container {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  header {
+    width: 150%;
+    height: auto;
+    background: #2D71C8;
+  }
+
+  .header-left,
+  .header-right {
+    position: relative;
+    color: white;
+    float: left;
+  }
+
+  .header-left {
+    width: 30%;
+  }
+
+  .header-right label {
+    position: absolute;
+    top: -3.7em;
+    right: 0;
+    cursor: pointer;
+  }
+
+  .header-right span {
+    position: relative;
+    width: 2em;
+    height: 2em;
+    background: rgba(255, 255, 255, .3);
+    -webkit-transition: all .3s ease;
+  }
+
+  .header-right span:hover {
+    background: rgba(255, 255, 255, .6);
+  }
+
+  .header-right span:before,
+  .header-right span:after {
+    content: '';
+    position: absolute;
+    width: 2em;
+    height: .5em;
+    top: 4px;
+    left: 0;
+    background: black;
+  }
+
+  .header-right span:after {
+    top: 14px;
+  }
+
+  .header-right {
+    width: 70%;
+    text-align: right;
+  }
+
+  #open {
+    display: none;
+  }
+
+  h1 {
+    font-weight: 300;
+    line-height: 40px;
+  }
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
+
+  nav>a {
+    position: relative;
+    display: inline-block;
+    font-size: 13px;
+    line-height: 40px;
+    padding: 0 2em;
+    -webkit-transition: all .3s ease;
+  }
+
+  nav>a:hover {
+    background: rgba(255, 255, 255, .9);
+    color: black;
+  }
+
+  .hidden-desktop {
+    display: none;
+  }
+
+  section {
+    width: 100%;
+    height: auto;
+    background-image: -webkit-linear-gradient(#80059E 0%, #550486 100%);
+  }
+
+  .section-left,
+  .section-right {
+    float: left;
+  }
+
+  .section-left {
+    width: 70%;
+    padding: 3em 0;
+  }
+
+  .section-right {
+    width: 30%;
+  }
+
+  .section-title,
+  .section-tagline {
+    color: white;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+    -webkit-transition: all .4s ease;
+  }
+
+  .section-title {
+    font-size: 4em;
+    margin-bottom: .3em;
+    text-shadow: 0 3px 0px black,
+      0 4px 0px rgba(150, 150, 150, .5);
+  }
+
+  .section-tagline {
+    font-size: 1em;
+  }
+
+  .learn-more {
+    display: table;
+    margin: 3em auto 0;
+    padding: 1em 6em;
+    cursor: pointer;
+    border-radius: 3px;
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .8);
+    background: #EAAF00;
+    background-image: -webkit-linear-gradient(#EAAF00 0%, #D78100 100%);
+    font-size: 1.2em;
+  }
+
+  .learn-more:hover {
+    background: #EAAF00;
+  }
+
+  .learn-more:active {
+    box-shadow: inset 0 2px 0 rgba(0, 0, 0, .8);
+  }
+
+  /* Portrait tablet to landscape and desktop */
+  @media (min-width: 768px) and (max-width: 979px) {
+    .box {
+      width: 49%;
+      margin-bottom: 5%;
+    }
+
+    ul li:nth-child(3) .box {
+      clear: both;
+    }
+
+    ul li:nth-child(2n) .box {
+      margin-right: 0;
+      clear: right;
+    }
+  }
+
+  /* Small monitor */
+  @media (max-width: 979px) {
+    nav>a {
+      padding: 0 1.5em;
+    }
+
+    .section-left,
+    .section-right {
+      width: 100%;
+    }
+
+    .section-left {
+      text-align: center;
+    }
+
+    .section-right {
+      padding: 0 0 2em;
+    }
+
+    .section-title {
+      font-size: 4em;
+      margin-bottom: .2em;
+    }
+
+    .section-tagline {
+      font-size: 1.3em;
+    }
+
+    .learn-more {
+      margin: 0 auto;
+    }
+  }
+
+  /* Landscape phone to portrait tablet */
+  @media (max-width: 767px) {
+    .container {
+      width: 100%;
+    }
+
+    nav>a {
+      padding: 0 2em;
+    }
+
+    h1 {
+      padding: .5em 0;
+    }
+
+    .header-left,
+    .header-right {
+      width: 100%;
+      text-align: center;
+    }
+
+    .section-left,
+    .section-right {
+      width: 100%;
+    }
+
+    .section-left {
+      text-align: center;
+      padding: 2em 0;
+    }
+
+    .section-right {
+      padding: 1em 0 2em;
+    }
+
+    .section-title {
+      font-size: 3em;
+      margin-bottom: .2em;
+    }
+
+    .section-tagline {
+      font-size: 1.3em;
+    }
+
+    .learn-more {
+      margin: 0 auto;
+    }
+  }
+
+  /* Landscape phones and down */
+  @media (max-width: 480px) {
+    body {
+      padding: 0 .5em;
+    }
+
+    .container {
+      width: 90%;
+    }
+
+    nav {
+      height: 0;
+      overflow: hidden;
+      -webkit-transition: all .3s ease;
+    }
+
+    input[type="checkbox"]:checked+nav {
+      height: 205px;
+    }
+
+    nav>a {
+      padding: 0 1em;
+      display: block;
+      border-bottom: solid 1px rgba(255, 255, 255, .1);
+    }
+
+    h1 {
+      padding: .5em 0;
+    }
+
+    .header-left,
+    .header-right {
+      width: 100%;
+      text-align: center;
+    }
+
+    .section-left,
+    .section-right {
+      width: 100%;
+    }
+
+    .section-left {
+      text-align: center;
+      padding: 1em 0;
+    }
+
+    .section-right {
+      text-align: center;
+      padding: 1em 0 2em;
+    }
+
+    .section-title {
+      font-size: 2.4em;
+      margin-bottom: 0;
+    }
+
+    .section-tagline {
+      font-size: 1em;
+    }
+
+    .learn-more {
+      display: table;
+      margin: 0 auto;
+    }
+
+    .hidden-desktop {
+      display: block;
+    }
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+  }
+
+  li {
+    float: left;
+  }
+
+  ul {
+    position: -webkit-sticky;
+    /* Safari */
+    position: sticky;
+    top: 0;
+  }
+
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+
+  /* Change the link color to #111 (black) on hover */
+  li a:hover {
+    background-color: #111;
+  }
+
+  .active {
+    background-color: #4CAF50;
+  }
+</style>
+
+
+
+<style>
+  p.v {
+    font-family: "Verdana", Geneva, sans-serif;
+    font-size: 150%;
+    color: blue;
+  }
+
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    width: 60%;
+    height: 31.25%;
+    position: relative;
+    padding-left: 20%;
+    /* padding-right: 20%; */
+  }
+
+  #canvas {}
+
+  #canvas-svg {}
+
+
+  .land {
+    fill: #222;
+  }
+
+  .boundary {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1px;
+  }
+
+  #tooltip-container {
+    position: inherit;
+    background-color: #fff;
+    color: #000;
+    padding: 10px;
+    border: 1px solid;
+    display: none;
+  }
+
+  .tooltip_key {
+    font-weight: bold;
+  }
+
+  .tooltip_value {
+    margin-left: 20px;
+    float: right;
+  }
+</style>
+<style>
+  p.v {
+    font-family: "Verdana", Geneva, sans-serif;
+    font-size: 300%;
+    color: blue;
+  }
+
+  body {
+    font: 10px sans-serif;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .bar {
+    fill: lightblue;
+  }
+
+  .bar:hover {
+    fill: #2D71C8;
+  }
+
+  .x.axis path {
+    display: none;
+  }
+
+  .d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 2px;
+  }
+
+  /* Creates a small triangle extender for the tooltip */
+  .d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+  }
+
+  /* Style northward tooltips differently */
+  .d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+  }
+
+  .link {
+    /* margin: 0 auto;
+    display: inline-block; */
+    /* position: absolute;
+    left: 50%; */
+    text-align: center;
+  }
+
+  a {
+    margin-top: 20px;
+    background-color: #2D71C8;
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Titillium Web', sans-serif;
+  }
+
+  a:hover,
+  a:active {
+    background-color: #0050A1;
+    display: inline-block
+  }
+</style>
 
 <body>
-    <div class="header">
+  <script src="d3.v3.min.js"></script>
+  <script src="d3.tip.v0.6.3.js"></script>
+  <script>
 
-    </div>
-    <div class="main-content">
-        <div class="sub-content1">
-            <h1>Welcome to Gini Database!</h1>
-        </div>
-        <div class="sub-content2" id="barChart" style="display:flex;">
-            <div>
-                <h4 id="view">View Gini-indices</h4>
-            </div>
-            <div>
-                <h4 id="view2">View Top Contries</h4>
-            </div>
-            <div>
-                <h4 id="view3">View other1</h4>
-            </div>
-            <div>
-                <h4 id="view4">View other2</h4>
-            </div>
-        </div>
-    </div>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            outline: none;
-            border: none;
-            -webkit-box-sizing: border-box;
-        }
-        
-        *:before,
-        *:after {
-            -webkit-box-sizing: border-box;
-        }
-        
-        .clearfix {
-            *zoom: 1;
-        }
-        
-        html {
-            font-family: Helvetica, arial, sans-serif;
-            font-size: 12px;
-        }
-        
-        body {
-            background: url('brushed_alu.png');
-        }
-        
-        .clearfix:before,
-        .clearfix:after {
-            display: table;
-            line-height: 0;
-            content: "";
-        }
-        
-        .clearfix:after {
-            clear: both;
-        }
-        
-        .container {
-            width: 90%;
-            margin: 0 auto;
-        }
-        
-        header {
-            width: 150%;
-            height: auto;
-            background: #2D71C8;
-        }
-        
-        .header-left,
-        .header-right {
-            position: relative;
-            color: white;
-            float: left;
-        }
-        
-        .header-left {
-            width: 30%;
-        }
-        
-        .header-right label {
-            position: absolute;
-            top: -3.7em;
-            right: 0;
-            cursor: pointer;
-        }
-        
-        .header-right span {
-            position: relative;
-            width: 2em;
-            height: 2em;
-            background: rgba(255, 255, 255, .3);
-            -webkit-transition: all .3s ease;
-        }
-        
-        .header-right span:hover {
-            background: rgba(255, 255, 255, .6);
-        }
-        
-        .header-right span:before,
-        .header-right span:after {
-            content: '';
-            position: absolute;
-            width: 2em;
-            height: .5em;
-            top: 4px;
-            left: 0;
-            background: black;
-        }
-        
-        .header-right span:after {
-            top: 14px;
-        }
-        
-        .header-right {
-            width: 70%;
-            text-align: right;
-        }
-        
-        #open {
-            display: none;
-        }
-        
-        h1 {
-            font-weight: 300;
-            line-height: 40px;
-        }
-        
-        a {
-            text-decoration: none;
-            color: white;
-        }
-        
-        nav>a {
-            position: relative;
-            display: inline-block;
-            font-size: 13px;
-            line-height: 40px;
-            padding: 0 2em;
-            -webkit-transition: all .3s ease;
-        }
-        
-        nav>a:hover {
-            background: rgba(255, 255, 255, .9);
-            color: black;
-        }
-        
-        .hidden-desktop {
-            display: none;
-        }
-        
-        section {
-            width: 100%;
-            height: auto;
-            background-image: -webkit-linear-gradient(#80059E 0%, #550486 100%);
-        }
-        
-        .section-left,
-        .section-right {
-            float: left;
-        }
-        
-        .section-left {
-            width: 70%;
-            padding: 3em 0;
-        }
-        
-        .section-right {
-            width: 30%;
-        }
-        
-        .section-title,
-        .section-tagline {
-            color: white;
-            font-weight: 300;
-            margin: 0;
-            padding: 0;
-            -webkit-transition: all .4s ease;
-        }
-        
-        .section-title {
-            font-size: 4em;
-            margin-bottom: .3em;
-            text-shadow: 0 3px 0px black, 0 4px 0px rgba(150, 150, 150, .5);
-        }
-        
-        .section-tagline {
-            font-size: 1em;
-        }
-        
-        .learn-more {
-            display: table;
-            margin: 3em auto 0;
-            padding: 1em 6em;
-            cursor: pointer;
-            border-radius: 3px;
-            box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .8);
-            background: #EAAF00;
-            background-image: -webkit-linear-gradient(#EAAF00 0%, #D78100 100%);
-            font-size: 1.2em;
-        }
-        
-        .learn-more:hover {
-            background: #EAAF00;
-        }
-        
-        .learn-more:active {
-            box-shadow: inset 0 2px 0 rgba(0, 0, 0, .8);
-        }
-        /* Portrait tablet to landscape and desktop */
-        
-        @media (min-width: 768px) and (max-width: 979px) {
-            .box {
-                width: 49%;
-                margin-bottom: 5%;
-            }
-            ul li:nth-child(3) .box {
-                clear: both;
-            }
-            ul li:nth-child(2n) .box {
-                margin-right: 0;
-                clear: right;
-            }
-        }
-        /* Small monitor */
-        
-        @media (max-width: 979px) {
-            nav>a {
-                padding: 0 1.5em;
-            }
-            .section-left,
-            .section-right {
-                width: 100%;
-            }
-            .section-left {
-                text-align: center;
-            }
-            .section-right {
-                padding: 0 0 2em;
-            }
-            .section-title {
-                font-size: 4em;
-                margin-bottom: .2em;
-            }
-            .section-tagline {
-                font-size: 1.3em;
-            }
-            .learn-more {
-                margin: 0 auto;
-            }
-        }
-        /* Landscape phone to portrait tablet */
-        
-        @media (max-width: 767px) {
-            .container {
-                width: 100%;
-            }
-            nav>a {
-                padding: 0 2em;
-            }
-            h1 {
-                padding: .5em 0;
-            }
-            .header-left,
-            .header-right {
-                width: 100%;
-                text-align: center;
-            }
-            .section-left,
-            .section-right {
-                width: 100%;
-            }
-            .section-left {
-                text-align: center;
-                padding: 2em 0;
-            }
-            .section-right {
-                padding: 1em 0 2em;
-            }
-            .section-title {
-                font-size: 3em;
-                margin-bottom: .2em;
-            }
-            .section-tagline {
-                font-size: 1.3em;
-            }
-            .learn-more {
-                margin: 0 auto;
-            }
-        }
-        /* Landscape phones and down */
-        
-        @media (max-width: 480px) {
-            body {
-                padding: 0 .5em;
-            }
-            .container {
-                width: 90%;
-            }
-            nav {
-                height: 0;
-                overflow: hidden;
-                -webkit-transition: all .3s ease;
-            }
-            input[type="checkbox"]:checked+nav {
-                height: 205px;
-            }
-            nav>a {
-                padding: 0 1em;
-                display: block;
-                border-bottom: solid 1px rgba(255, 255, 255, .1);
-            }
-            h1 {
-                padding: .5em 0;
-            }
-            .header-left,
-            .header-right {
-                width: 100%;
-                text-align: center;
-            }
-            .section-left,
-            .section-right {
-                width: 100%;
-            }
-            .section-left {
-                text-align: center;
-                padding: 1em 0;
-            }
-            .section-right {
-                text-align: center;
-                padding: 1em 0 2em;
-            }
-            .section-title {
-                font-size: 2.4em;
-                margin-bottom: 0;
-            }
-            .section-tagline {
-                font-size: 1em;
-            }
-            .learn-more {
-                display: table;
-                margin: 0 auto;
-            }
-            .hidden-desktop {
-                display: block;
-            }
-        }
-        
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #333;
-        }
-        
-        li {
-            float: left;
-        }
-        
-        ul {
-            position: -webkit-sticky;
-            /* Safari */
-            position: sticky;
-            top: 0;
-        }
-        
-        li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-        /* Change the link color to #111 (black) on hover */
-        
-        li a:hover {
-            background-color: #111;
-        }
-        
-        .active {
-            background-color: #4CAF50;
-        }
-    </style>
+    var margin = { top: 40, right: 20, bottom: 30, left: 140 },
+      width = 900 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
 
-    <style>
-        p.v {
-            font-family: "Verdana", Geneva, sans-serif;
-            font-size: 150%;
-            color: blue;
-        }
-        
-        body {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            width: 60%;
-            height: 31.25%;
-            position: relative;
-            padding-left: 20%;
-            /* padding-right: 20%; */
-        }
-        
-        #canvas {}
-        
-        #canvas-svg {}
-        
-        .land {
-            fill: #222;
-        }
-        
-        .boundary {
-            fill: none;
-            stroke: #fff;
-            stroke-width: 1px;
-        }
-        
-        #tooltip-container {
-            position: inherit;
-            background-color: #fff;
-            color: #000;
-            padding: 10px;
-            border: 1px solid;
-            display: none;
-        }
-        
-        .tooltip_key {
-            font-weight: bold;
-        }
-        
-        .tooltip_value {
-            margin-left: 20px;
-            float: right;
-        }
-    </style>
-    <style>
-        p.v {
-            font-family: "Verdana", Geneva, sans-serif;
-            font-size: 300%;
-            color: blue;
-        }
-        
-        body {
-            font: 10px sans-serif;
-        }
-        
-        .axis path,
-        .axis line {
-            fill: none;
-            stroke: #000;
-            shape-rendering: crispEdges;
-        }
-        
-        .bar {
-            fill: lightblue;
-        }
-        
-        .bar:hover {
-            fill: #2D71C8;
-        }
-        
-        .x.axis path {
-            display: none;
-        }
-        
-        .d3-tip {
-            line-height: 1;
-            font-weight: bold;
-            padding: 12px;
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            border-radius: 2px;
-        }
-        /* Creates a small triangle extender for the tooltip */
-        
-        .d3-tip:after {
-            box-sizing: border-box;
-            display: inline;
-            font-size: 10px;
-            width: 100%;
-            line-height: 1;
-            color: rgba(0, 0, 0, 0.8);
-            content: "\25BC";
-            position: absolute;
-            text-align: center;
-        }
-        /* Style northward tooltips differently */
-        
-        .d3-tip.n:after {
-            margin: -1px 0 0 0;
-            top: 100%;
-            left: 0;
-        }
-        
-        .link {
-            /* margin: 0 auto;
-          display: inline-block; */
-            /* position: absolute;
-          left: 50%; */
-            text-align: center;
-        }
-        
-        a {
-            margin-top: 20px;
-            background-color: #2D71C8;
-            color: white;
-            padding: 14px 25px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-family: 'Titillium Web', sans-serif;
-        }
-        
-        a:hover,
-        a:active {
-            background-color: #0050A1;
-            display: inline-block
-        }
-    </style>
+    var formatPercent = d3.format(".0%");
 
-    <script>
-        $('#view').click(function() {
-            var margin = {
-                    top: 40,
-                    right: 20,
-                    bottom: 30,
-                    left: 140
-                },
-                width = 900 - margin.left - margin.right,
-                height = 500 - margin.top - margin.bottom;
+    var x = d3.scale.ordinal()
+      .rangeRoundBands([0, width], .1);
 
-            var formatPercent = d3.format(".0%");
+    var y = d3.scale.linear()
+      .range([height, 0]);
 
-            var x = d3.scale.ordinal()
-                .rangeRoundBands([0, width], .1);
+    var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom");
 
-            var y = d3.scale.linear()
-                .range([height, 0]);
+    var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left");
+    // .tickFormat(formatPercent);
 
-            var xAxis = d3.svg.axis()
-                .scale(x)
-                .orient("bottom");
+    var tip = d3.tip()
+      .attr('class', 'd3-tip')
+      .offset([-10, 0])
+      .html(function (d) {
+        return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
+      })
 
-            var yAxis = d3.svg.axis()
-                .scale(y)
-                .orient("left");
-            // .tickFormat(formatPercent);
+    var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            var tip = d3.tip()
-                .attr('class', 'd3-tip')
-                .offset([-10, 0])
-                .html(function(d) {
-                    return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
-                })
-            $(".sub-content2").attr("hidden", true);
-            var svg = d3.select("body").append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    svg.call(tip);
 
-            svg.call(tip);
+    d3.csv("records_by_year.csv", type, function (error, data) {
+      x.domain(data.map(function (d) { return d.group; }));
+      y.domain([0, d3.max(data, function (d) { return d.$1; })]);
 
-            d3.csv("records_by_year.csv", type, function(error, data) {
-                x.domain(data.map(function(d) {
-                    return d.group;
-                }));
-                y.domain([0, d3.max(data, function(d) {
-                    return d.$1;
-                })]);
+      svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
 
-                svg.append("g")
-                    .attr("class", "x axis")
-                    .attr("transform", "translate(0," + height + ")")
-                    .call(xAxis)
+        .selectAll("text")
+        .attr("transform", "rotate(10)");
 
-                .selectAll("text")
-                    .attr("transform", "rotate(10)");
+      svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(0)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("user per million people");
 
-                svg.append("g")
-                    .attr("class", "y axis")
-                    .call(yAxis)
-                    .append("text")
-                    .attr("transform", "rotate(0)")
-                    .attr("y", 6)
-                    .attr("dy", ".71em")
-                    .style("text-anchor", "end")
-                    .text("indices");
+      svg.selectAll(".bar")
+        .data(data)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function (d) { return x(d.group); })
+        .attr("width", x.rangeBand())
+        .attr("y", function (d) { return y(d.$1); })
+        .attr("height", function (d) { return height - y(d.$1); })
+        .on('mouseover', tip.show)
+        .on('mouseout', tip.hide)
 
-                svg.selectAll(".bar")
-                    .data(data)
-                    .enter().append("rect")
-                    .attr("class", "bar")
-                    .attr("x", function(d) {
-                        return x(d.group);
-                    })
-                    .attr("width", x.rangeBand())
-                    .attr("y", function(d) {
-                        return y(d.$1);
-                    })
-                    .attr("height", function(d) {
-                        return height - y(d.$1);
-                    })
-                    .on('mouseover', tip.show)
-                    .on('mouseout', tip.hide)
-            });
+    });
 
-            function type(d) {
-                d.$1 = +d.$1;
-                return d;
-            }
-        });
-    </script>
-    <script>
-        $('#view2').click(function() {
-            var margin = {
-                    top: 40,
-                    right: 20,
-                    bottom: 30,
-                    left: 140
-                },
-                width = 900 - margin.left - margin.right,
-                height = 500 - margin.top - margin.bottom;
+    function type(d) {
+      d.$1 = +d.$1;
+      return d;
+    }
 
-            var formatPercent = d3.format(".0%");
-
-            var x = d3.scale.ordinal()
-                .rangeRoundBands([0, width], .1);
-
-            var y = d3.scale.linear()
-                .range([height, 0]);
-
-            var xAxis = d3.svg.axis()
-                .scale(x)
-                .orient("bottom");
-
-            var yAxis = d3.svg.axis()
-                .scale(y)
-                .orient("left");
-            // .tickFormat(formatPercent);
-
-            var tip = d3.tip()
-                .attr('class', 'd3-tip')
-                .offset([-10, 0])
-                .html(function(d) {
-                    return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
-                })
-            $(".sub-content2").attr("hidden", true);
-            var svg = d3.select("#barChart").append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            svg.call(tip);
-
-            d3.csv("records_by_year.csv", type, function(error, data) {
-                x.domain(data.map(function(d) {
-                    return d.group;
-                }));
-                y.domain([0, d3.max(data, function(d) {
-                    return d.$1;
-                })]);
-
-                svg.append("g")
-                    .attr("class", "x axis")
-                    .attr("transform", "translate(0," + height + ")")
-                    .call(xAxis)
-
-                .selectAll("text")
-                    .attr("transform", "rotate(10)");
-
-                svg.append("g")
-                    .attr("class", "y axis")
-                    .call(yAxis)
-                    .append("text")
-                    .attr("transform", "rotate(0)")
-                    .attr("y", 6)
-                    .attr("dy", ".71em")
-                    .style("text-anchor", "end")
-                    .text("indices");
-
-                svg.selectAll(".bar")
-                    .data(data)
-                    .enter().append("rect")
-                    .attr("class", "bar")
-                    .attr("x", function(d) {
-                        return x(d.group);
-                    })
-                    .attr("width", x.rangeBand())
-                    .attr("y", function(d) {
-                        return y(d.$1);
-                    })
-                    .attr("height", function(d) {
-                        return height - y(d.$1);
-                    })
-                    .on('mouseover', tip.show)
-                    .on('mouseout', tip.hide)
-            });
-
-            function type(d) {
-                d.$1 = +d.$1;
-                return d;
-            }
-        });
-    </script>
-    <script>
-        $('#view3').click(function() {
-            var margin = {
-                    top: 40,
-                    right: 20,
-                    bottom: 30,
-                    left: 140
-                },
-                width = 900 - margin.left - margin.right,
-                height = 500 - margin.top - margin.bottom;
-
-            var formatPercent = d3.format(".0%");
-
-            var x = d3.scale.ordinal()
-                .rangeRoundBands([0, width], .1);
-
-            var y = d3.scale.linear()
-                .range([height, 0]);
-
-            var xAxis = d3.svg.axis()
-                .scale(x)
-                .orient("bottom");
-
-            var yAxis = d3.svg.axis()
-                .scale(y)
-                .orient("left");
-            // .tickFormat(formatPercent);
-
-            var tip = d3.tip()
-                .attr('class', 'd3-tip')
-                .offset([-10, 0])
-                .html(function(d) {
-                    return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
-                })
-            $(".sub-content2").attr("hidden", true);
-            var svg = d3.select("#barChart").append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            svg.call(tip);
-
-            d3.csv("records_by_year.csv", type, function(error, data) {
-                x.domain(data.map(function(d) {
-                    return d.group;
-                }));
-                y.domain([0, d3.max(data, function(d) {
-                    return d.$1;
-                })]);
-
-                svg.append("g")
-                    .attr("class", "x axis")
-                    .attr("transform", "translate(0," + height + ")")
-                    .call(xAxis)
-
-                .selectAll("text")
-                    .attr("transform", "rotate(10)");
-
-                svg.append("g")
-                    .attr("class", "y axis")
-                    .call(yAxis)
-                    .append("text")
-                    .attr("transform", "rotate(0)")
-                    .attr("y", 6)
-                    .attr("dy", ".71em")
-                    .style("text-anchor", "end")
-                    .text("indices");
-
-                svg.selectAll(".bar")
-                    .data(data)
-                    .enter().append("rect")
-                    .attr("class", "bar")
-                    .attr("x", function(d) {
-                        return x(d.group);
-                    })
-                    .attr("width", x.rangeBand())
-                    .attr("y", function(d) {
-                        return y(d.$1);
-                    })
-                    .attr("height", function(d) {
-                        return height - y(d.$1);
-                    })
-                    .on('mouseover', tip.show)
-                    .on('mouseout', tip.hide)
-            });
-
-            function type(d) {
-                d.$1 = +d.$1;
-                return d;
-            }
-        });
-    </script>
-    <script>
-        $('#view4').click(function() {
-            var margin = {
-                    top: 40,
-                    right: 20,
-                    bottom: 30,
-                    left: 140
-                },
-                width = 900 - margin.left - margin.right,
-                height = 500 - margin.top - margin.bottom;
-
-            var formatPercent = d3.format(".0%");
-
-            var x = d3.scale.ordinal()
-                .rangeRoundBands([0, width], .1);
-
-            var y = d3.scale.linear()
-                .range([height, 0]);
-
-            var xAxis = d3.svg.axis()
-                .scale(x)
-                .orient("bottom");
-
-            var yAxis = d3.svg.axis()
-                .scale(y)
-                .orient("left");
-            // .tickFormat(formatPercent);
-
-            var tip = d3.tip()
-                .attr('class', 'd3-tip')
-                .offset([-10, 0])
-                .html(function(d) {
-                    return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
-                })
-            $(".sub-content2").attr("hidden", true);
-            var svg = d3.select("#barChart").append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            svg.call(tip);
-
-            d3.csv("records_by_year.csv", type, function(error, data) {
-                x.domain(data.map(function(d) {
-                    return d.group;
-                }));
-                y.domain([0, d3.max(data, function(d) {
-                    return d.$1;
-                })]);
-
-                svg.append("g")
-                    .attr("class", "x axis")
-                    .attr("transform", "translate(0," + height + ")")
-                    .call(xAxis)
-
-                .selectAll("text")
-                    .attr("transform", "rotate(10)");
-
-                svg.append("g")
-                    .attr("class", "y axis")
-                    .call(yAxis)
-                    .append("text")
-                    .attr("transform", "rotate(0)")
-                    .attr("y", 6)
-                    .attr("dy", ".71em")
-                    .style("text-anchor", "end")
-                    .text("indices");
-
-                svg.selectAll(".bar")
-                    .data(data)
-                    .enter().append("rect")
-                    .attr("class", "bar")
-                    .attr("x", function(d) {
-                        return x(d.group);
-                    })
-                    .attr("width", x.rangeBand())
-                    .attr("y", function(d) {
-                        return y(d.$1);
-                    })
-                    .attr("height", function(d) {
-                        return height - y(d.$1);
-                    })
-                    .on('mouseover', tip.show)
-                    .on('mouseout', tip.hide)
-            });
-
-            function type(d) {
-                d.$1 = +d.$1;
-                return d;
-            }
-        });
-    </script>
-    <script>
-        $('#gini').click(function() {
-            window.location.reload();
-        });
-    </script>
+  </script>
 </body>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
 
 </html>
