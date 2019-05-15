@@ -7,7 +7,7 @@ body {
     width: 50%;
     height: 50%;
 }
-.sub-content2 {
+#barChart {
     display: flex;
 }
 
