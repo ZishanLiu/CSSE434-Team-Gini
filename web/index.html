@@ -83,7 +83,7 @@
                     return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
                 })
             $(".sub-content2").attr("hidden", true);
-            var svg = d3.select(".svg-content").append("svg")
+            var svg = d3.select("body").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
