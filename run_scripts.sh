@@ -39,6 +39,8 @@ pig -x mapreduce -p hbaseInput=$1 -p hdfsOutput=$2 scripts/count_records_by_year
 hadoop fs -rm "${2}/records_by_year/.pig_schema" 
 hadoop fs -getmerge "${2}/records_by_year" "${3}/records_by_year.csv"
 
+pig -x mapreduce -p hbaseInput=$1 -p hdfsOutput=$2 -p jar_location=/tmp/gini/piggybank.jar scripts/split_countries.pig
+
 
 # below are not used for now
 
