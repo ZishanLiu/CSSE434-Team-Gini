@@ -16,7 +16,6 @@
     <title>Gini-Index</title>
 
     <svg width="1900" height="1020"></svg>
-    <script src="config.js"></script>
     <script src="imgs.js"></script>
     <script src="color_ranges.js"></script>
     <script src="visual.js"></script>
@@ -81,7 +80,7 @@
                 .html(function(d) {
                     return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
                 })
-            $("#view").attr("hidden", true);
+            $(".sub-content2").attr("hidden", true);
             var svg = d3.select("#barChart").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
@@ -174,7 +173,7 @@
                 .html(function(d) {
                     return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
                 })
-            $("#view2").attr("hidden", true);
+            $(".sub-content2").attr("hidden", true);
             var svg = d3.select("#barChart").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
@@ -267,7 +266,7 @@
                 .html(function(d) {
                     return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
                 })
-            $("#view3").attr("hidden", true);
+            $(".sub-content2").attr("hidden", true);
             var svg = d3.select("#barChart").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
@@ -360,7 +359,7 @@
                 .html(function(d) {
                     return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
                 })
-            $("#view4").attr("hidden", true);
+            $(".sub-content2").attr("hidden", true);
             var svg = d3.select("#barChart").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
