@@ -5,6 +5,9 @@
 chmod +x run_scripts.sh 
 ./run_scripts.sh hbase://gini /tmp/gini/RealOutput RealOutput
 
+# move file to web side
+./move_frontend_file.sh
+
 # to add a record to input file
 chmod +x add_record.sh
 ./add_record.sh datasets/cleaned/gini.csv Zimbabwe ZWE 2013 44 datasets/cleaned/gini1.csv
