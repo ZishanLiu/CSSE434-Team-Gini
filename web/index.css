@@ -3,12 +3,13 @@ body {
     margin: 0%;
 }
 
-.sub-content {
+.main-content {
     width: 50%;
     height: 50%;
-    
 }
-
+.sub-content2 {
+    display: flex;
+}
 
 
 h1 {
