@@ -13,6 +13,11 @@ body {
     left: 50%;
 }
 
+.svg-content{
+    top: 50%;
+    left: 50%;
+}
+
 .sub-content2{
     display: flex;
     position: absolute;

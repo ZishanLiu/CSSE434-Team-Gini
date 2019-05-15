@@ -45,7 +45,9 @@
           </div>
         </div>
     </div>
+    <div class="svg-content">
 
+    </div>
     <script>
         $('#view').click(function() {
             var margin = {
@@ -81,7 +83,7 @@
                     return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
                 })
             $(".sub-content2").attr("hidden", true);
-            var svg = d3.select("#barChart").append("svg")
+            var svg = d3.select(".svg-content").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
