@@ -6,4 +6,4 @@ data = LOAD '${hbaseInput}' USING org.apache.pig.backend.hadoop.hbase.HBaseStora
  value:value','-loadKey false')
  AS (country_name:chararray, country_code:chararray, year:int, value:float);
 
-STORE data INTO '${hdfsOutput}/countries/' USING org.apache.pig.piggybank.storage.MultiStorage('${hdfsOutput}/countries/','0', 'none', ','); 
+STORE data INTO '${hdfsOutput}/countries' USING org.apache.pig.piggybank.storage.MultiStorage('${hdfsOutput}/countries','0', 'none', ','); 
