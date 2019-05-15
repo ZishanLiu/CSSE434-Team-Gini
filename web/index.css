@@ -9,9 +9,9 @@ body {
 }
 
 .sub-content1 {
-    font-size: 50px;
+    font-size: 45px;
     position: absolute;
-    width:500ox;
+    width:700px;
     transform: translate(-50%,-50%);
     top: 50%;
     left: 50%;
