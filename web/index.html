@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <header class="clearfix">
     <div class="container">
         <div class="header-left">
@@ -13,12 +11,9 @@
             </label>
             <nav>
                 <a id="view1">View Gini Indices!</a>
-                <label class="btn custom-input-btn">
-                    <input type="file" name="fileContent" id="inputfile" style="display:none" accept="*" multiple>
-                    <i class="fa fa-cloud-upload"></i> Select Files!
-                </label>
-                <a id="view3">View Low Indices!</a>
-                <a id="view4">View Word map!</a>
+                <input type="file" id="inputfile" name="fileContent">
+                <a id="view3">View other 1</a>
+                <a id="view4">View other 2</a>
             </nav>
         </div>
     </div>
@@ -84,7 +79,7 @@
     }
     
     .header-left {
-        margin-top: 3%;
+      margin-top: 3%;
         width: 30%;
     }
     
@@ -132,19 +127,20 @@
     }
     
     h1 {
-        font-style: italic;
-        font-size: 40px;
+       font-style: italic;
+        font-size: 30px;
         line-height: 40px;
         font-weight: bold;
     }
     
     a {
-        font-size: 20px;
+        font-size:20px;
         text-decoration: none;
         color: black;
     }
     
     nav>a {
+
         position: relative;
         display: inline-block;
         font-size: 13px;
