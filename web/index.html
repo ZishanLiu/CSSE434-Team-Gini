@@ -3,7 +3,7 @@
 <header class="clearfix">
   <div class="container">
     <div class="header-left">
-      <h1>Welcome to Gini database !</h1>
+      <h1 id="title">Welcome to Gini database !</h1>
     </div>
     <div class="header-right">
       <label for="open">
@@ -546,6 +546,9 @@
   <script src="d3.tip.v0.6.3.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script>
+    $('#title').click(function(){
+        $(".main-chart").empty();
+    });
     $('#view1').click(function(){
         $(".main-chart").empty();
         var margin = { top: 40, right: 20, bottom: 30, left: 140 },
@@ -628,7 +631,7 @@
   </script>
   <script>
     $('#countrySelect').change(function(){
-        alert($(this).val());
+        // alert($(this).val());
         $(".main-chart").empty();
         var margin = { top: 40, right: 20, bottom: 30, left: 140 },
         width = 900 - margin.left - margin.right,
