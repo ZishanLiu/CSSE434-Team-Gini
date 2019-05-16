@@ -660,9 +660,11 @@
     <script>
         $('#title').click(function() {
             $(".main-chart").empty();
+            $("#canvas-svg").empty();
         });
         $('#view1').click(function() {
             $(".main-chart").empty();
+            $("#canvas-svg").empty();
             var margin = {
                     top: 40,
                     right: 20,
@@ -758,6 +760,7 @@
         $('#countrySelect').change(function() {
             // alert($(this).val());
             $(".main-chart").empty();
+            $("#canvas-svg").empty();
             var margin = {
                     top: 40,
                     right: 20,
@@ -855,6 +858,8 @@
 
     <script>
         $('#view4').click(function() {
+            $("#canvas-svg").empty();
+            $(".main-chart").empty();
             d3.csv("recent.csv", function(err, data) {
                 console.log(data);
                 var config = {
