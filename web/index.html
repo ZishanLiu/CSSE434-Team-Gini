@@ -564,10 +564,10 @@
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function (d) {
-            return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
+            return "<strong>Frequency:</strong> <span style='color:red'>" + d.value + "</span>";
         })
         $("#view").attr("hidden", true);
-        var svg = d3.select("body").append("svg")
+        var svg = d3.select(".main-chart").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -575,9 +575,9 @@
     
         svg.call(tip);
     
-        d3.csv("records_by_year.csv", type, function (error, data) {
-        x.domain(data.map(function (d) { return d.group; }));
-        y.domain([0, d3.max(data, function (d) { return d.$1; })]);
+        d3.csv("1980_1984low10.csv", type, function (error, data) {
+        x.domain(data.map(function (d) { return d.name; }));
+        y.domain([0, d3.max(data, function (d) { return d.value; })]);
     
         svg.append("g")
             .attr("class", "x axis")
@@ -601,16 +601,16 @@
             .data(data)
             .enter().append("rect")
             .attr("class", "bar")
-            .attr("x", function (d) { return x(d.group); })
+            .attr("x", function (d) { return x(d.name); })
             .attr("width", x.rangeBand())
-            .attr("y", function (d) { return y(d.$1); })
-            .attr("height", function (d) { return height - y(d.$1); })
+            .attr("y", function (d) { return y(d.value); })
+            .attr("height", function (d) { return height - y(d.value); })
             .on('mouseover', tip.show)
             .on('mouseout', tip.hide)
     });
 
         function type(d) {
-        d.$1 = +d.$1;
+        d.value = +d.value;
         return d;
         }
     });
