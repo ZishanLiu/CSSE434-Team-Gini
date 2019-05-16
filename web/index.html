@@ -592,7 +592,7 @@
     svg.call(tip);
 
     d3.csv("records_by_year.csv", type, function (error, data) {
-      x.domain(data.map(function (d) { return d.group; }));
+      x.domain(data.map(function (d) { return d.$0; }));
       y.domain([0, d3.max(data, function (d) { return d.$1; })]);
 
       svg.append("g")
@@ -617,7 +617,7 @@
         .data(data)
         .enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function (d) { return x(d.group); })
+        .attr("x", function (d) { return x(d.$0); })
         .attr("width", x.rangeBand())
         .attr("y", function (d) { return y(d.$1); })
         .attr("height", function (d) { return height - y(d.$1); })
