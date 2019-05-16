@@ -30,7 +30,6 @@ body {
 input {
         font-size: 30px;
         position: absolute;
-    
         transform: translate(-50%,-50%);
         top: 70%;
         left: 50%;
@@ -159,7 +158,7 @@ a {
 nav>a {
   position: relative;
   display: inline-block;
-  font-size: 13px;
+  font-size: 25px;
   line-height: 40px;
   padding: 0 2em;
   -webkit-transition: all .3s ease;
