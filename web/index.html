@@ -628,7 +628,7 @@
     $('#view1').click(function(){
         $(".main-chart").empty();
         var margin = { top: 40, right: 20, bottom: 30, left: 140 },
-        width = 1000 - margin.left - margin.right,
+        width = 1300 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
     
         var formatPercent = d3.format(".0%");
@@ -683,7 +683,7 @@
             .attr("y",6)
             .attr("dy", ".71em")
             .style("text-anchor", "end")
-            .text("indices");
+            .text("");
     
         svg.selectAll(".bar")
             .data(data)
