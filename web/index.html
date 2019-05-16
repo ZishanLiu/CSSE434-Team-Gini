@@ -563,7 +563,7 @@
       .attr('class', 'd3-tip')
       .offset([-10, 0])
       .html(function (d) {
-        return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
+        return "<strong>Frequency:</strong> <span style='color:red'>" + d.user_per_million_people + "</span>";
       })
 
     var svg = d3.select(".main-chart").append("svg")
@@ -574,9 +574,9 @@
 
     svg.call(tip);
 
-    d3.csv("records_by_year.csv", type, function (error, data) {
-      x.domain(data.map(function (d) { return d.group; }));
-      y.domain([0, d3.max(data, function (d) { return d.$1; })]);
+    d3.csv("finalPop_low.csv", type, function (error, data) {
+      x.domain(data.map(function (d) { return d.Country; }));
+      y.domain([0, d3.max(data, function (d) { return d.user_per_million_people; })]);
 
       svg.append("g")
         .attr("class", "x axis")
@@ -600,17 +600,17 @@
         .data(data)
         .enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function (d) { return x(d.group); })
+        .attr("x", function (d) { return x(d.Country); })
         .attr("width", x.rangeBand())
-        .attr("y", function (d) { return y(d.$1); })
-        .attr("height", function (d) { return height - y(d.$1); })
+        .attr("y", function (d) { return y(d.user_per_million_people); })
+        .attr("height", function (d) { return height - y(d.user_per_million_people); })
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide)
 
     });
 
     function type(d) {
-      d.$1 = +d.$1;
+      d.user_per_million_people = +d.user_per_million_people;
       return d;
     }
 
