@@ -39,8 +39,16 @@ pig -x mapreduce -p hbaseInput=$1 -p hdfsOutput=$2 scripts/count_records_by_year
 hadoop fs -rm "${2}/records_by_year/.pig_schema" 
 hadoop fs -getmerge "${2}/records_by_year" "${3}/records_by_year.csv"
 
-pig -x mapreduce -p hbaseInput=$1 -p hdfsOutput=$2 -p jar_location=hdfs:///tmp/gini/piggybank.jar scripts/split_countries.pig
-# pig -x mapreduce -p hbaseInput=hbase://gini -p hdfsOutput=/tmp/gini/RealOutput -p jar_location=hdfs:///tmp/gini/piggybank-0.15.0.jar scripts/split_countries.pig
+pig -x mapreduce -p hbaseInput=$1 -p hdfsOutput=$2 -p jar_location=hdfs:///tmp/gini/piggybank-0.15.0.jar scripts/split_countries.pig
+hadoop fs -get "${2}/countries" "${3}/countries"
+cd ${3}/countries
+for file in */*000; do mv "$file" "${file/-0,000/.csv}" ; done
+mv */*.csv .
+rm -rf */
+rm -f _SUCCESS
+echo "NAME,CODE,YEAR,VALUE" > headerfile
+for csv in *.csv; do cat headerfile "$csv" > tmpfile2; mv -f tmpfile2 "$csv"; done
+rm -f headerfile
 
 # below are not used for now
 
