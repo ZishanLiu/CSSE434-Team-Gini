@@ -3,7 +3,7 @@
 <header class="clearfix">
   <div class="container">
     <div class="header-left">
-      <h1>User By Country</h1>
+      <h1>Welcome to Gini database !</h1>
     </div>
     <div class="header-right">
       <label for="open">
@@ -24,6 +24,9 @@
         <a id="view3">View other 1</a>
         <a id="view4">View other 2</a>
       </nav>
+    </div>
+    <div class="main-chart">
+
     </div>
   </div>
 </header>
@@ -149,7 +152,7 @@
 
         position: relative;
         display: inline-block;
-        font-size: 13px;
+        font-size: 25px;
         line-height: 40px;
         padding: 0 2em;
         -webkit-transition: all .3s ease;
@@ -560,10 +563,10 @@
       .attr('class', 'd3-tip')
       .offset([-10, 0])
       .html(function (d) {
-        return "<strong>Frequency:</strong> <span style='color:red'>" + d.user_per_million_people + "</span>";
+        return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
       })
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select(".main-chart").append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
@@ -571,9 +574,9 @@
 
     svg.call(tip);
 
-    d3.csv("finalPop_low.csv", type, function (error, data) {
-      x.domain(data.map(function (d) { return d.Country; }));
-      y.domain([0, d3.max(data, function (d) { return d.user_per_million_people; })]);
+    d3.csv("records_by_year.csv", type, function (error, data) {
+      x.domain(data.map(function (d) { return d.group; }));
+      y.domain([0, d3.max(data, function (d) { return d.$1; })]);
 
       svg.append("g")
         .attr("class", "x axis")
@@ -597,17 +600,17 @@
         .data(data)
         .enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function (d) { return x(d.Country); })
+        .attr("x", function (d) { return x(d.group); })
         .attr("width", x.rangeBand())
-        .attr("y", function (d) { return y(d.user_per_million_people); })
-        .attr("height", function (d) { return height - y(d.user_per_million_people); })
+        .attr("y", function (d) { return y(d.$1); })
+        .attr("height", function (d) { return height - y(d.$1); })
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide)
 
     });
 
     function type(d) {
-      d.user_per_million_people = +d.user_per_million_people;
+      d.$1 = +d.$1;
       return d;
     }
 
@@ -619,11 +622,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Gini-Index</title>
 </head>
-<div class="link">
-  <a href="./statistic_high.html">Git user per million population(Top 20)</a>
-
-</div>
+ 
 
 </html>
