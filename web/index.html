@@ -13,7 +13,8 @@
                 <a id="view1">View Gini Indices!</a>
                 <!-- <input type="file" id="inputfile" name="fileContent"> -->
                 <a id="view2">
-                    <select>
+                    <select id="countrySelect">
+                        <option value="" disabled selected>Select A Country!</option>
                         <option value="Albania">Albania</option>
                         <option value="Algeria">Algeria</option>
                         <option value="Angola">Angola</option>
@@ -632,7 +633,8 @@
         });
     </script>
     <script>
-        $('#view2').click(function() {
+        function selectCountry(name){
+        $('#countrySelect').on('change',function() {
             $(".main-content").empty();
             var margin = {
                     top: 40,
@@ -675,7 +677,7 @@
 
             svg.call(tip);
 
-            d3.csv("records_by_year.csv", type, function(error, data) {
+            d3.csv($( "#myselect" ).val() + ".csv", type, function(error, data) {
                 x.domain(data.map(function(d) {
                     return d.group;
                 }));
@@ -724,7 +726,7 @@
                 d.$1 = +d.$1;
                 return d;
             }
-        });
+        })};
     </script>
     <script>
         $('#view3').click(function() {
