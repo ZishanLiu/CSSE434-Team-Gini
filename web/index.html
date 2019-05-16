@@ -1073,11 +1073,11 @@
                             return d.id;
                         })
                         .attr("title", function(d) {
-                            return d.properties.country;
+                            return d.properties.name;
                         })
                         .style("fill", function(d) {
-                            if (valueHash[d.properties.country]) {
-                                var c = quantize((valueHash[d.properties.country]));
+                            if (valueHash[d.properties.name]) {
+                                var c = quantize((valueHash[d.properties.name]));
                                 var color = colors[c].getColors();
                                 return "rgb(" + color.r + "," + color.g +
                                     "," + color.b + ")";
@@ -1090,10 +1090,10 @@
 
                             html += "<div class=\"tooltip_kv\">";
                             html += "<span class=\"tooltip_key\">";
-                            html += d.properties.country;
+                            html += d.properties.value;
                             html += "</span>";
                             html += "<span class=\"tooltip_value\">";
-                            html += (valueHash[d.properties.country] ? valueFormat(valueHash[d.properties.country]) : "");
+                            html += (valueHash[d.properties.value] ? valueFormat(valueHash[d.properties.value]) : "");
                             html += "";
                             html += "</span>";
                             html += "</div>";
