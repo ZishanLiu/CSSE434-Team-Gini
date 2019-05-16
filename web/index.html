@@ -1,566 +1,649 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>D3: Bar Chart</title>
-		<script src="http://d3js.org/d3.v3.min.js"></script>
-	<!-- 	<script type="text/javascript" src="../d3/d3.v3.js"></script> -->
-		<style type="text/css">
-	
-                       /* CSS stuff here */
-
-                    	.axis path,
-			.axis line {
-				fill: none;
-				stroke: black;
-				shape-rendering: crispEdges;
-			}
-			
-			.axis text {
-				font-family: sans-serif;
-				font-size: 11px;
-			}
-
-                        svg .x path,
-                        svg .x line
-                        {
-                                stroke: black;
-                        }
-
-			svg .legend text {
-                                font-family: sans-serif;
-				font-size: 12px;
-			} 
-
-                        .slider {width: 500px; margin: 0; padding: 0; background: #fff;}
-                        
-                  
-
-		</style>
-
-	</head>
-	<body>
-		
-
-
-           <script type="text/javascript">
-
-	     //Width and height
-		var w = 1500;
-		var h = 600;
-                var padding = 150;
-			
-		var datasetfull;
-                var dataset;
-                
-	     d3.csv("data.csv", function(data){
-
-                datasetfull = data;
-                dataset = data;
-
-                   var startchart = dataset.length-31;
-                   var endchart = dataset.length-1;
-                   var active_gs = 1; 
-	           var layers;
-                   var colnames;
-                   var numcolsfull;
-                   var colnamesfull;
-                   var activebar;
-
-                   readDate = d3.time.format("%Y-%m-%d").parse
-                   readDate2 = d3.time.format("%m/%d/%y").parse
-                   cleanDate = d3.time.format("%m/%d/%y")   
-
-                  dataset.forEach(function(d){
-                    d.date = cleanDate(readDate(d.date));}
-                  );         
-                                                  
-
-
-
-                // set up the page
-
-                   var instuctions = d3.select("body")
-                      .append("div")
-                      .attr("id","instructions")
-                      .attr("align","center")
-                      .attr("height",h)
-                      .append("p")
-                         .text("Adjust the period of time with the sliders, change between group and stack layouts with the radio buttons, and toggle the types displayed by clicking on the legend color of each type.")
-
-                   var control = d3.select("body")
-                      .append("div")
-                      .attr("id", "control")
-                      .attr("align","center")
-                      .attr("height",h);
-
-	           var titlespace = d3.select("body")
-                      .append("div")
-                      .attr("id", "titlespace")
-                      .attr("align","center")
-                      .attr("height", h);
-
-                   var chartdiv = d3.select("body")
-                        .append("div")
-                        .attr("id","chartdiv")
-                        .attr("align","center");
-
-                   var chartsvg = d3.select("#chartdiv").append("svg")
-                        .attr("id","chartsvg") 
-                        .attr("height",h)
-                        .attr("width",w);                      
-
-                    
-                   function colorScale(x){
-                      var colors = ["red","blue","green","purple","orange"]
-                      return colors[colnames.indexOf(x)];
-                   };
- 
-
-                // Get Column Names From the CSV (excluding first column of dates)
-                   numcolsfull = d3.entries(dataset[0]).length
-	           colnamesfull = [];
-                   for(var i = 1; i < numcolsfull; i++){
-                       colnamesfull.push(d3.entries(dataset[0])[i].key)
-                   };
-
-                   for(var i = 0; i < colnamesfull.length; i++){
-                       dataset.forEach(function(d){
-                          d[colnamesfull[i]] = +d[colnamesfull[i]]
-                       })
-                   };   
-                   
-                   activebar = colnamesfull;
-                   
-              
-              
-                 function rebuild(){
-
-                       controlpanel()
-                       charttitle()
-                       subset(startchart, endchart)
-                       makechart()
-                  }
-
-
-                
-
-                  rebuild()
-                  makelegend()
-           
-                 // set up the control div
-
-                 function controlpanel(){
-
-                   d3.select("#datesliders")
-                      .remove()
-                   d3.select("#groupstackform")
-                      .remove()
-
-                      var control = d3.select("#control")
-
-                      var datesliders = control.append("g")
-                         .attr("id","datesliders");
-
-                         var datestart = datesliders.append("div")
-                            .attr("id","datestart")
-                            .text("Start: ")
-                            .append("input")
-                               .attr("name", "datestartslider")
-                               .attr("class","slider")
-                               .attr("type","range")
-                               .attr("min",0)
-                               .attr("max",datasetfull.length-1)
-                               .attr("value", startchart)
-                               .on("input", function(){
-                                     startchart = this.value ;
-                                     charttitle()
-                                })
-                               .on("change", function() {
-                                   startchart = this.value ;
-                                   rebuild()
-                                });
-
-
-                         d3.select("#datestart")
-                            .append("output") 
-                               .attr("for","datestartslider")
-                               .attr("onforminput","value = datestartslider.valueAsNumber;");
-                  
-
-
-                         var dateend = datesliders.append("div")
-                            .attr("id","dateend")
-                            .text("End: ")
-                            .append("input")
-                               .attr("class","slider")
-                               .attr("type","range")
-                               .attr("min",0)
-                               .attr("max",datasetfull.length-1)
-                               .attr("value", endchart)
-                               .on("input", function(){
-                                     endchart = this.value ;
-                                     charttitle()
-                                })
-                               .on("change", function() {
-                                   endchart = this.value; 
-                                   rebuild()
-                                });
-
-
-
-                     var groupstackoptions = ["Grouped","Stacked"];
-
-                     var groupstackform = control.append("form")
-                        .attr("id","groupstackform");
-
-                         var groupstackspan = groupstackform.selectAll("span")
-                            .data(groupstackoptions)
-                            .enter()
-                               .append("span");
-
-
-                            groupstackspan.append("input")
-                               .attr({type: "radio",
-                                  class: "shape",
-                                  name: "mode",
-                                  value: function(d, i){ return i;},
-                                  id: function(d){return d;} 
-                                   })
-
-                               .property("checked", function(d,i){return (i === active_gs);});
-
-                            groupstackspan.append("label")
-                               .text(function(d){return d;});
-
-                       
-
-                       d3.select("#Grouped")
-                         .on("change", function(){
-                                          subset(startchart, endchart)
-                                          makechart()});
-
-                       d3.select("#Stacked")
-                         .on("change", function(){
-                                          subset(startchart, endchart)
-                                          makechart()});
-                     
- 
-        
-                    } // end control div
- 
-                
-                // display chart title
-
-                function charttitle(){
-
-                   d3.select("#title")
-                         .remove()
-
-                   var title = d3.select("#titlespace").append("h2")
-                      .attr("id","title")
-                      .text("Bars from:  " + datasetfull[startchart].date + "  -  " + datasetfull[endchart].date);
-
-                } // end chart title
-
-
-
-           // Legend                      
-                  
-             function makelegend(){
- 
-                    var legend = d3.select("#chartsvg").append("g")
-                       .attr("id","legend")
-                       .selectAll(".legend")
-                       .data(colnamesfull)
-                       .enter()
-                       .append("g")
-                       .attr("class","legend")
-                       .attr("transform", function(d,i){return "translate(-50," + (50 + i * 20) + ")";})
-
-                    legend.append("rect")
-	               .attr("x", w+35)
-                       .attr("width", 18)
-                       .attr("height", 18)
-                       .attr("id",function(d,i){return "block"+i;})
-                       .style("fill", function(d,i){return colorScale(colnamesfull[i]);})
-                       .property("status","active")
-                       .on("click",function(d,i){
-                                      if(this.status == "active"){
-                                         d3.select("#block"+i).style("fill","white")
-                                           .property("status","inactive")
-                                         getActiveBars()
-                                         rebuild()
-                                         }
-                                       else if(this.status == "inactive"){
-                                         d3.select("#block"+i).style("fill",colorScale(colnamesfull[i]))
-                                           .property("status","active")
-                                         getActiveBars()
-                                         rebuild()
-                                         }
-      
-                                    }
-
-                       );
-
-                         function getActiveBars(){
-                             activebar = [];
-                             for( var i = 0; i < colnames.length; i++){
-                                if(d3.select("#block"+i).property("status") == "active"){
-                                   activebar.push(colnames[i]);
-                                 }
-                             }
-                         };
-                   
-
-                    legend.append("text")
-                       .attr("x", w+30)
-                       .attr("y", 9)
-                       .attr("dy",".35em")
-                       .style("text-anchor", "end")
-                       .text(function(d,i,j) { return d; });        
-
-
-                 };
-
-
-
-
-          //function for subsetting
-
-          function subset(startindex, endindex){
-
-                    var startdate = readDate2(datasetfull[startindex].date);
-                    var enddate = readDate2(datasetfull[endindex].date);
-
-                    if(startdate > enddate){
-                       alert("Start cannot be after End");
-                       startchart = datasetfull.length-31;
-                       endchart = datasetfull.length-1;
-                      
-                       rebuild();
-                    }
-
-                    var sub = [];
-
-                     for(var i = 0; i < data.length; i++){
-                        if(readDate2(data[i].date) >= startdate & readDate2(data[i].date) <= enddate){
-	                   sub.push(d3.values(data)[i]);
-	                }
-	                else
-	                {
-	                }
-	                }
-
-                        dataset = sub;
-
-                // Get Column Names From the CSV (excluding first column of dates)
-                   numcols = d3.entries(dataset[0]).length
-	           colnames = [];
-                   for(var i = 1; i < numcols; i++){
-                       colnames.push(d3.entries(dataset[0])[i].key)
-                   };
-
-                   for(var i = 0; i < colnames.length; i++){
-                       dataset.forEach(function(d){
-                          d[colnames[i]] = +d[colnames[i]]
-                       })
-                   };   
-
-                // Clean the data
-              
-
-                  layers = d3.layout.stack()(activebar.map(function(c) {
-                       return dataset.map(function(d) {
-                          return {x: d.date, y: +d[c]};
-                       });
-                   }));
-
-          // Define Scales
-
-                   xScale = d3.scale.ordinal()
-                     .domain(dataset.map(function(d){return d.date;}))
-                     .rangeRoundBands([padding, w - padding],.05);    
-
-                   yMaxStack = d3.max(layers, function(layer) {return d3.max(layer, function(d) { return d.y0 + d.y; });});
-                   yMaxGroup = d3.max(layers, function(layer) {return d3.max(layer, function(d) { return d.y; });});
-
-
-
-                   // find group or stack from radio button
- 
-                   var radios = document.getElementsByName('mode');
-                   for (var i = 0, length = radios.length; i < length; i++) {
-                       if (radios[i].checked) {
-                          active_gs = +radios[i].value;
-                          break;
-                         }
-                   }
-
-                   // set y scale accordingly
-                   if(active_gs == 1)
-                       yScale = d3.scale.linear()
-		         .domain([0, yMaxStack])
-                         .range([h-padding, padding])
-                         .nice();
-                   if(active_gs == 0)
-                       yScale = d3.scale.linear()
-		         .domain([0, yMaxGroup])
-                         .range([h-padding, padding])
-                         .nice();
-
-           
-                  }  // end subset
-
-
-
-                // function for making the chart
-
-
-
-
-                function makechart(){
-                  
-                    d3.select("#chart")
-                          .remove()
-
-
-                 // Define Axes
-               
-                    // find the first observation of each month for
-                    // the x axis as default
-
-                   
-                   readDate = d3.time.format("%m/%d/%y").parse
- 
-                    var xdates = [];
-                    for(var i = 1; i < dataset.length; i++){
-                        if(readDate(dataset[i].date).getMonth() != readDate(dataset[i-1].date).getMonth()){
-                           xdates.push(dataset[i].date);
-                        }
-                    };
-
-                    // shorter windows, label more
-
-                    if(dataset.length <= 20 ){
-                       xdates = [];
-                       for(var i = 0; i < dataset.length; i++){
-                          xdates.push(dataset[i].date);
-                       }
-                    }
-
-                    if(dataset.length > 20 & dataset.length <= 35){
-                      xdates = [];
-                      for(var i = 0; i < dataset.length; i = i + 2){
-                         xdates.push(dataset[i].date);
-                      }
-                    }
-
-
-
-                    var xAxis = d3.svg.axis()
-                        .scale(xScale)
-                        .orient("bottom")
-                        .tickValues(xdates);                
-
-                    var yAxis = d3.svg.axis()
-                        .scale(yScale)
-                        .orient("left")
-                        .ticks(5);
-     
-	     var chart = d3.select("#chartsvg").append("g")
-                   .attr("id","chart")
-
-                  
-                      
-                 // Set up layer
-
-	            var layer = chart.selectAll(".layer")
-                       .data(layers)
-                       .enter()
-                          .append("g")
-                             .attr("class","layer")
-                             .attr("id",function(d,i){return colnamesfull[i]+"layer";})
-                             .style("fill", function(d,i) { return colorScale(activebar[i]);});
-
-                 // Create Bars
-       
-                    var bars = layer.selectAll("bars")
-                       .data(function(d){return d;})
-                       .enter()
-                          .append("rect")
-                             .attr("x",function(d){return xScale(d.x);})
-                             .attr("y",h)
-                             .attr("width", xScale.rangeBand())
-                             .attr("height", 0);
-
-                 // Bars transition 
-                    bars.transition()
-                       .delay(function(d,i){ return i * 5; })
-                       .attr("y", function(d) { return yScale(d.y0 + d.y); })
-                       .attr("height", function(d){ return yScale(d.y0) - yScale(d.y + d.y0); });
-
-                 // Draw axes
-
-                    // x axis 
-                    chart.append("g")
-                       .attr("class", "axis x")
-                       .attr("transform","translate(0, " + (h - padding) + ")")
-                       .call(xAxis)
-                           .selectAll("text")
-                              .style("text-anchor", "middle")
-                              .attr("dy", "20px");
-
-                    // y axis
-	            chart.append("g")
-                       .attr("id","yaxis")
-                       .attr("class", "axis")
-	               .attr("transform","translate(" + padding + ",0)")
-                       .call(yAxis);
-                        
-                     d3.select("#yaxis").append("text")
-                       .attr("y", padding - 20)
-                       .attr("x", -20)
-                       .attr("text-anchor", "end")
-                       .text("Count");
-
-                     if(active_gs == 0){
-                        transition2group()
-                       };
-                     if(active_gs == 1){
-                        transition2stack()
-                       };
-
-
-                    } //end function for making chart
-
-
-
-
- 
-                  // transitions 
-                    function transition2group(){
-                        bars = d3.select("#chart").selectAll(".layer").selectAll("rect")
-                          .transition()
-                               .attr("x",function(d,i,j){return xScale(d.x) + xScale.rangeBand() / activebar.length * j;}) 
-                               .attr("width", xScale.rangeBand() / activebar.length)                                
-                               .attr("y", function(d) { return yScale(d.y); })
-                                .attr("height", function(d){ return h - padding - yScale(d.y); });
-                        
-                    }
-                    function transition2stack(){
-                        bars = d3.select("#chart").selectAll(".layer").selectAll("rect")
-                          .transition()
-                             .attr("x",function(d){return xScale(d.x);})
-                             .attr("width", xScale.rangeBand())
-                             .attr("y", function(d) { return yScale(d.y0 + d.y); })
-                             .attr("height", function(d){ return yScale(d.y0) - yScale(d.y + d.y0); });
-                    }
-                    
-           
-
-         
-        })
-        </script>
-    </body>
+<meta charset="utf-8">
+<header class="clearfix">
+  <div class="container">
+    <div class="header-left">
+      <h1>User By Country</h1>
+    </div>
+    <div class="header-right">
+      <label for="open">
+        <span class="hidden-desktop"></span>
+      </label>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="user_per_people.html">User Distribution</a>
+        <a href="user_per_people.html">User Density</a>
+        <a href="contribution_pie.html">Contribution</a>
+      </nav>
+    </div>
+  </div>
+</header>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+    -webkit-box-sizing: border-box;
+  }
+
+  *:before,
+  *:after {
+    -webkit-box-sizing: border-box;
+  }
+
+  .clearfix {
+    *zoom: 1;
+  }
+
+  html {
+    font-family: Helvetica, arial, sans-serif;
+    font-size: 12px;
+  }
+
+  body {
+    background: url('brushed_alu.png');
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    line-height: 0;
+    content: "";
+  }
+
+  .clearfix:after {
+    clear: both;
+  }
+
+  .container {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  header {
+    width: 150%;
+    height: auto;
+    background: #2D71C8;
+  }
+
+  .header-left,
+  .header-right {
+    position: relative;
+    color: white;
+    float: left;
+  }
+
+  .header-left {
+    width: 30%;
+  }
+
+  .header-right label {
+    position: absolute;
+    top: -3.7em;
+    right: 0;
+    cursor: pointer;
+  }
+
+  .header-right span {
+    position: relative;
+    width: 2em;
+    height: 2em;
+    background: rgba(255, 255, 255, .3);
+    -webkit-transition: all .3s ease;
+  }
+
+  .header-right span:hover {
+    background: rgba(255, 255, 255, .6);
+  }
+
+  .header-right span:before,
+  .header-right span:after {
+    content: '';
+    position: absolute;
+    width: 2em;
+    height: .5em;
+    top: 4px;
+    left: 0;
+    background: black;
+  }
+
+  .header-right span:after {
+    top: 14px;
+  }
+
+  .header-right {
+    width: 70%;
+    text-align: right;
+  }
+
+  #open {
+    display: none;
+  }
+
+  h1 {
+    font-weight: 300;
+    line-height: 40px;
+  }
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
+
+  nav>a {
+    position: relative;
+    display: inline-block;
+    font-size: 13px;
+    line-height: 40px;
+    padding: 0 2em;
+    -webkit-transition: all .3s ease;
+  }
+
+  nav>a:hover {
+    background: rgba(255, 255, 255, .9);
+    color: black;
+  }
+
+  .hidden-desktop {
+    display: none;
+  }
+
+  section {
+    width: 100%;
+    height: auto;
+    background-image: -webkit-linear-gradient(#80059E 0%, #550486 100%);
+  }
+
+  .section-left,
+  .section-right {
+    float: left;
+  }
+
+  .section-left {
+    width: 70%;
+    padding: 3em 0;
+  }
+
+  .section-right {
+    width: 30%;
+  }
+
+  .section-title,
+  .section-tagline {
+    color: white;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+    -webkit-transition: all .4s ease;
+  }
+
+  .section-title {
+    font-size: 4em;
+    margin-bottom: .3em;
+    text-shadow: 0 3px 0px black,
+      0 4px 0px rgba(150, 150, 150, .5);
+  }
+
+  .section-tagline {
+    font-size: 1em;
+  }
+
+  .learn-more {
+    display: table;
+    margin: 3em auto 0;
+    padding: 1em 6em;
+    cursor: pointer;
+    border-radius: 3px;
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .8);
+    background: #EAAF00;
+    background-image: -webkit-linear-gradient(#EAAF00 0%, #D78100 100%);
+    font-size: 1.2em;
+  }
+
+  .learn-more:hover {
+    background: #EAAF00;
+  }
+
+  .learn-more:active {
+    box-shadow: inset 0 2px 0 rgba(0, 0, 0, .8);
+  }
+
+  /* Portrait tablet to landscape and desktop */
+  @media (min-width: 768px) and (max-width: 979px) {
+    .box {
+      width: 49%;
+      margin-bottom: 5%;
+    }
+
+    ul li:nth-child(3) .box {
+      clear: both;
+    }
+
+    ul li:nth-child(2n) .box {
+      margin-right: 0;
+      clear: right;
+    }
+  }
+
+  /* Small monitor */
+  @media (max-width: 979px) {
+    nav>a {
+      padding: 0 1.5em;
+    }
+
+    .section-left,
+    .section-right {
+      width: 100%;
+    }
+
+    .section-left {
+      text-align: center;
+    }
+
+    .section-right {
+      padding: 0 0 2em;
+    }
+
+    .section-title {
+      font-size: 4em;
+      margin-bottom: .2em;
+    }
+
+    .section-tagline {
+      font-size: 1.3em;
+    }
+
+    .learn-more {
+      margin: 0 auto;
+    }
+  }
+
+  /* Landscape phone to portrait tablet */
+  @media (max-width: 767px) {
+    .container {
+      width: 100%;
+    }
+
+    nav>a {
+      padding: 0 2em;
+    }
+
+    h1 {
+      padding: .5em 0;
+    }
+
+    .header-left,
+    .header-right {
+      width: 100%;
+      text-align: center;
+    }
+
+    .section-left,
+    .section-right {
+      width: 100%;
+    }
+
+    .section-left {
+      text-align: center;
+      padding: 2em 0;
+    }
+
+    .section-right {
+      padding: 1em 0 2em;
+    }
+
+    .section-title {
+      font-size: 3em;
+      margin-bottom: .2em;
+    }
+
+    .section-tagline {
+      font-size: 1.3em;
+    }
+
+    .learn-more {
+      margin: 0 auto;
+    }
+  }
+
+  /* Landscape phones and down */
+  @media (max-width: 480px) {
+    body {
+      padding: 0 .5em;
+    }
+
+    .container {
+      width: 90%;
+    }
+
+    nav {
+      height: 0;
+      overflow: hidden;
+      -webkit-transition: all .3s ease;
+    }
+
+    input[type="checkbox"]:checked+nav {
+      height: 205px;
+    }
+
+    nav>a {
+      padding: 0 1em;
+      display: block;
+      border-bottom: solid 1px rgba(255, 255, 255, .1);
+    }
+
+    h1 {
+      padding: .5em 0;
+    }
+
+    .header-left,
+    .header-right {
+      width: 100%;
+      text-align: center;
+    }
+
+    .section-left,
+    .section-right {
+      width: 100%;
+    }
+
+    .section-left {
+      text-align: center;
+      padding: 1em 0;
+    }
+
+    .section-right {
+      text-align: center;
+      padding: 1em 0 2em;
+    }
+
+    .section-title {
+      font-size: 2.4em;
+      margin-bottom: 0;
+    }
+
+    .section-tagline {
+      font-size: 1em;
+    }
+
+    .learn-more {
+      display: table;
+      margin: 0 auto;
+    }
+
+    .hidden-desktop {
+      display: block;
+    }
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+  }
+
+  li {
+    float: left;
+  }
+
+  ul {
+    position: -webkit-sticky;
+    /* Safari */
+    position: sticky;
+    top: 0;
+  }
+
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+
+  /* Change the link color to #111 (black) on hover */
+  li a:hover {
+    background-color: #111;
+  }
+
+  .active {
+    background-color: #4CAF50;
+  }
+</style>
+
+
+
+<style>
+  p.v {
+    font-family: "Verdana", Geneva, sans-serif;
+    font-size: 150%;
+    color: blue;
+  }
+
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    width: 60%;
+    height: 31.25%;
+    position: relative;
+    padding-left: 20%;
+    /* padding-right: 20%; */
+  }
+
+  #canvas {}
+
+  #canvas-svg {}
+
+
+  .land {
+    fill: #222;
+  }
+
+  .boundary {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1px;
+  }
+
+  #tooltip-container {
+    position: inherit;
+    background-color: #fff;
+    color: #000;
+    padding: 10px;
+    border: 1px solid;
+    display: none;
+  }
+
+  .tooltip_key {
+    font-weight: bold;
+  }
+
+  .tooltip_value {
+    margin-left: 20px;
+    float: right;
+  }
+</style>
+<style>
+  p.v {
+    font-family: "Verdana", Geneva, sans-serif;
+    font-size: 300%;
+    color: blue;
+  }
+
+  body {
+    font: 10px sans-serif;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .bar {
+    fill: lightblue;
+  }
+
+  .bar:hover {
+    fill: #2D71C8;
+  }
+
+  .x.axis path {
+    display: none;
+  }
+
+  .d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 2px;
+  }
+
+  /* Creates a small triangle extender for the tooltip */
+  .d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+  }
+
+  /* Style northward tooltips differently */
+  .d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+  }
+
+  .link {
+    /* margin: 0 auto;
+    display: inline-block; */
+    /* position: absolute;
+    left: 50%; */
+    text-align: center;
+  }
+
+  a {
+    margin-top: 20px;
+    background-color: #2D71C8;
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Titillium Web', sans-serif;
+  }
+
+  a:hover,
+  a:active {
+    background-color: #0050A1;
+    display: inline-block
+  }
+</style>
+
+<body>
+  <script src="d3.v3.min.js"></script>
+  <script src="d3.tip.v0.6.3.js"></script>
+  <script>
+
+    var margin = { top: 40, right: 20, bottom: 30, left: 140 },
+      width = 900 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
+
+    var formatPercent = d3.format(".0%");
+
+    var x = d3.scale.ordinal()
+      .rangeRoundBands([0, width], .1);
+
+    var y = d3.scale.linear()
+      .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left");
+    // .tickFormat(formatPercent);
+
+    var tip = d3.tip()
+      .attr('class', 'd3-tip')
+      .offset([-10, 0])
+      .html(function (d) {
+        return "<strong>Frequency:</strong> <span style='color:red'>" + d.user_per_million_people + "</span>";
+      })
+
+    var svg = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.call(tip);
+
+    d3.csv("finalPop_low.csv", type, function (error, data) {
+      x.domain(data.map(function (d) { return d.Country; }));
+      y.domain([0, d3.max(data, function (d) { return d.user_per_million_people; })]);
+
+      svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+
+        .selectAll("text")
+        .attr("transform", "rotate(10)");
+
+      svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(0)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("user per million people");
+
+      svg.selectAll(".bar")
+        .data(data)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function (d) { return x(d.Country); })
+        .attr("width", x.rangeBand())
+        .attr("y", function (d) { return y(d.user_per_million_people); })
+        .attr("height", function (d) { return height - y(d.user_per_million_people); })
+        .on('mouseover', tip.show)
+        .on('mouseout', tip.hide)
+
+    });
+
+    function type(d) {
+      d.user_per_million_people = +d.user_per_million_people;
+      return d;
+    }
+
+  </script>
+</body>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<div class="link">
+  <a href="./statistic_high.html">Git user per million population(Top 20)</a>
+
+</div>
+
 </html>
