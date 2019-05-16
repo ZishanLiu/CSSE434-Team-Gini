@@ -551,8 +551,8 @@
 </style>
 
 <body>
-  <script src="d3.v3.min.js"></script>
-  <script src="d3.tip.v0.6.3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.3/d3-tip.min.js"></script>
   <script>
 
     var margin = { top: 40, right: 20, bottom: 30, left: 140 },
@@ -592,7 +592,7 @@
     svg.call(tip);
 
     d3.csv("records_by_year.csv", type, function (error, data) {
-      x.domain(data.map(function (d) { return d.$0; }));
+      x.domain(data.map(function (d) { return d.group; }));
       y.domain([0, d3.max(data, function (d) { return d.$1; })]);
 
       svg.append("g")
@@ -617,7 +617,7 @@
         .data(data)
         .enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function (d) { return x(d.$0); })
+        .attr("x", function (d) { return x(d.group); })
         .attr("width", x.rangeBand())
         .attr("y", function (d) { return y(d.$1); })
         .attr("height", function (d) { return height - y(d.$1); })
@@ -641,9 +641,6 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
 </head>
-<div class="link">
-  <a href="./statistic_high.html">Git user per million population(Top 20)</a>
-
-</div>
+ 
 
 </html>
