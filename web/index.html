@@ -152,7 +152,7 @@
 
         position: relative;
         display: inline-block;
-        font-size: 25px;
+        font-size: 18px;
         line-height: 40px;
         padding: 0 2em;
         -webkit-transition: all .3s ease;
@@ -537,82 +537,83 @@
   <script src="d3.v3.min.js"></script>
   <script src="d3.tip.v0.6.3.js"></script>
   <script>
-
-    var margin = { top: 40, right: 20, bottom: 30, left: 140 },
-      width = 900 - margin.left - margin.right,
-      height = 500 - margin.top - margin.bottom;
-
-    var formatPercent = d3.format(".0%");
-
-    var x = d3.scale.ordinal()
-      .rangeRoundBands([0, width], .1);
-
-    var y = d3.scale.linear()
-      .range([height, 0]);
-
-    var xAxis = d3.svg.axis()
-      .scale(x)
-      .orient("bottom");
-
-    var yAxis = d3.svg.axis()
-      .scale(y)
-      .orient("left");
-    // .tickFormat(formatPercent);
-
-    var tip = d3.tip()
-      .attr('class', 'd3-tip')
-      .offset([-10, 0])
-      .html(function (d) {
-        return "<strong>Frequency:</strong> <span style='color:red'>" + d.user_per_million_people + "</span>";
-      })
-
-    var svg = d3.select(".main-chart").append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    svg.call(tip);
-
-    d3.csv("finalPop_low.csv", type, function (error, data) {
-      x.domain(data.map(function (d) { return d.Country; }));
-      y.domain([0, d3.max(data, function (d) { return d.user_per_million_people; })]);
-
-      svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis)
-
-        .selectAll("text")
-        .attr("transform", "rotate(10)");
-
-      svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis)
-        .append("text")
-        .attr("transform", "rotate(0)")
-        .attr("y", 6)
-        .attr("dy", ".71em")
-        .style("text-anchor", "end")
-        .text("user per million people");
-
-      svg.selectAll(".bar")
-        .data(data)
-        .enter().append("rect")
-        .attr("class", "bar")
-        .attr("x", function (d) { return x(d.Country); })
-        .attr("width", x.rangeBand())
-        .attr("y", function (d) { return y(d.user_per_million_people); })
-        .attr("height", function (d) { return height - y(d.user_per_million_people); })
-        .on('mouseover', tip.show)
-        .on('mouseout', tip.hide)
-
+    $('#view1').click(function(){
+        var margin = { top: 40, right: 20, bottom: 30, left: 140 },
+        width = 900 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+    
+        var formatPercent = d3.format(".0%");
+    
+        var x = d3.scale.ordinal()
+        .rangeRoundBands([0, width], .1);
+    
+        var y = d3.scale.linear()
+        .range([height, 0]);
+    
+        var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+    
+        var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+        // .tickFormat(formatPercent);
+    
+        var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function (d) {
+            return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
+        })
+        $("#view").attr("hidden", true);
+        var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+        svg.call(tip);
+    
+        d3.csv("records_by_year.csv", type, function (error, data) {
+        x.domain(data.map(function (d) { return d.group; }));
+        y.domain([0, d3.max(data, function (d) { return d.$1; })]);
+    
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis)
+    
+            .selectAll("text")
+            .attr("transform", "rotate(10)");
+    
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("transform", "rotate(0)")
+            .attr("y",6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            .text("indices");
+    
+        svg.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", function (d) { return x(d.group); })
+            .attr("width", x.rangeBand())
+            .attr("y", function (d) { return y(d.$1); })
+            .attr("height", function (d) { return height - y(d.$1); })
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide)
     });
 
-    function type(d) {
-      d.user_per_million_people = +d.user_per_million_people;
-      return d;
-    }
+        function type(d) {
+        d.$1 = +d.$1;
+        return d;
+        }
+    });
+
 
   </script>
 </body>
