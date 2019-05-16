@@ -143,11 +143,11 @@
     }
     
     #view2 {
-        font-size: 16px;
+        font-size: 18px;
     }
 
     select option{
-        font-size: 16px;
+        font-size: 18px;
     }
 
     a {
@@ -160,7 +160,7 @@
 
         position: relative;
         display: inline-block;
-        font-size: 16px;
+        font-size: 18px;
         line-height: 40px;
         padding: 0 2em;
         -webkit-transition: all .3s ease;
@@ -547,6 +547,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script>
     $('#view1').click(function(){
+        $(".main-chart").empty();
         var margin = { top: 40, right: 20, bottom: 30, left: 140 },
         width = 900 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
@@ -574,7 +575,7 @@
         .html(function (d) {
             return "<strong>Frequency:</strong> <span style='color:red'>" + d.value + "</span>";
         })
-        $("#view").attr("hidden", true);
+        // $("#view").attr("hidden", true);
         var svg = d3.select(".main-chart").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
