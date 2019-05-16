@@ -19,6 +19,82 @@
                 <option value="Algeria">Algeria</option>
                 <option value="Angola">Angola</option>
                 <option value="Argentina">Argentina</option>
+                <option value="Argentina">Armenia</option>
+                <option value="Argentina">Australia</option>
+                <option value="Argentina">Austria</option>
+                <option value="Argentina">Azerbaijan</option>
+                <option value="Argentina">Bangladesh</option>
+                <option value="Argentina">Belarus</option>
+                <option value="Argentina">Belgium</option>
+                <option value="Argentina">Belize</option>
+                <option value="Argentina">Benin</option>
+                <option value="Argentina">Bhutan</option>
+                <option value="Argentina">Bolivia</option>
+                <option value="Argentina">Bosnia and Herzegovina</option>
+                <option value="Argentina">Botswana</option>
+                <option value="Argentina">Brazil</option>
+                <option value="Argentina">Bulgaria</option>
+                <option value="Argentina">Burkina Faso</option>
+                <option value="Argentina">Burundi</option>
+                <option value="Argentina">Cabo Verde</option>
+                <option value="Argentina">Cameroon</option>
+                <option value="Argentina">Canada</option>
+                <option value="Argentina">Central African Republic</option>
+                <option value="Argentina">Chad</option>
+                <option value="Argentina">Chile</option>
+                <option value="Argentina">China</option>
+                <option value="Argentina">Colombia</option>
+                <option value="Argentina">Comoros</option>
+                <option value="Argentina">Congo  Dem. Rep.</option>
+                <option value="Argentina">Costa Rica</option>
+                <option value="Argentina">Cote d'Ivoire</option>
+                <option value="Argentina">Croatia</option>
+                <option value="Argentina">Cyprus</option>
+                <option value="Argentina">Czech Republic</option>
+                <option value="Argentina">Denmark</option>
+                <option value="Argentina">Djibouti</option>
+                <option value="Argentina">Dominican Republic</option>
+                <option value="Argentina">Ecuador</option>
+                <option value="Argentina">Egypt  Arab Rep.</option>
+                <option value="Argentina">El Salvador</option>
+                <option value="Argentina">Estonia</option>
+                <option value="Argentina">Eswatini</option>
+                <option value="Argentina">Ethiopia</option>
+                <option value="Argentina">Fiji</option>
+                <option value="Argentina">Finland</option>
+                <option value="Argentina">France</option>
+                <option value="Argentina">Gabon</option>
+                <option value="Argentina">Gambia  The</option>
+                <option value="Argentina">Georgia</option>
+                <option value="Argentina">Germany</option>
+                <option value="Argentina">Ghana</option>
+                <option value="Argentina">Greece</option>
+                <option value="Argentina">Guatemala</option>
+                <option value="Argentina">Guinea</option>
+                <option value="Argentina">Guinea-Bissau</option>
+                <option value="Argentina">Guyana</option>
+                <option value="Argentina">Haiti</option>
+                <option value="Argentina">Honduras</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Iceland</option>
+                <option value="Argentina">India</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Hungary</option>
+                <option value="Argentina">Hungary</option>
+                
+
             </select>
         </a>
         <a id="view3" href="index2.html">View Top and Low!</a><br>
@@ -576,7 +652,7 @@
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function (d) {
-            return "<strong>Frequency:</strong> <span style='color:red'>" + d.value + "</span>";
+            return "<strong>Frequency:</strong> <span style='color:red'>" + d.$1 + "</span>";
         })
         // $("#view").attr("hidden", true);
         var svg = d3.select(".main-chart").append("svg")
@@ -587,9 +663,9 @@
     
         svg.call(tip);
     
-        d3.csv("1980_1984low10.csv", type, function (error, data) {
-        x.domain(data.map(function (d) { return d.name; }));
-        y.domain([0, d3.max(data, function (d) { return d.value; })]);
+        d3.csv("records_by_year.csv", type, function (error, data) {
+        x.domain(data.map(function (d) { return d.group; }));
+        y.domain([0, d3.max(data, function (d) { return d.$1; })]);
     
         svg.append("g")
             .attr("class", "x axis")
@@ -613,16 +689,16 @@
             .data(data)
             .enter().append("rect")
             .attr("class", "bar")
-            .attr("x", function (d) { return x(d.name); })
+            .attr("x", function (d) { return x(d.group); })
             .attr("width", x.rangeBand())
-            .attr("y", function (d) { return y(d.value); })
-            .attr("height", function (d) { return height - y(d.value); })
+            .attr("y", function (d) { return y(d.$1); })
+            .attr("height", function (d) { return height - y(d.$1); })
             .on('mouseover', tip.show)
             .on('mouseout', tip.hide)
     });
 
         function type(d) {
-        d.value = +d.value;
+        d.$1 = +d.$1;
         return d;
         }
     });
