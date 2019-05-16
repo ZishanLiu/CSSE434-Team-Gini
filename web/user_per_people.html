@@ -534,7 +534,7 @@ body {
 
 d3.csv("rent.csv", function(err, data) {
   console.log(data);
-  var config = {"data0":"Country (or dependent territory)","data1":"Capita",
+  var config = {"data0":"country","data1":"value",
               "label0":"label 0","label1":"label 1","color0":"#99ccff","color1":"#0050A1",
               "width":960,"height":960}
   
@@ -686,7 +686,7 @@ d3.csv("rent.csv", function(err, data) {
         })
         .on("mousemove", function(d) {
             var html = "";
-  
+            console.log(d.properties);
             html += "<div class=\"tooltip_kv\">";
             html += "<span class=\"tooltip_key\">";
             html += d.properties.name;
