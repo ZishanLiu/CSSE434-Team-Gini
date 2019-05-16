@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+
+<header class="clearfix">
+    <div class="container">
+      <div class="header-left">
+        <h1>Git User Density</h1>
+      </div>
+      <div class="header-right">
+        <label for="open">
+          <span class="hidden-desktop"></span>
+        </label>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="userCount.html">User Distribution</a>
+          <a href="statistic_high.html">Barchart</a>
+          <a href="contribution_pie.html">Contribution</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <style>
+      * {
+        margin: 0;
+        padding: 0;
+        outline: none;
+        border: none;
+        -webkit-box-sizing: border-box;
+      }
+    
+      *:before,
+      *:after {
+        -webkit-box-sizing: border-box;
+      }
+    
+      .clearfix {
+        *zoom: 1;
+      }
+    
+      html {
+        font-family: Helvetica, arial, sans-serif;
+        font-size: 12px;
+      }
+    
+      body {
+        background: url('brushed_alu.png');
+      }
+    
+      .clearfix:before,
+      .clearfix:after {
+        display: table;
+        line-height: 0;
+        content: "";
+      }
+    
+      .clearfix:after {
+        clear: both;
+      }
+    
+      .container {
+        width: 90%;
+        margin: 0 auto;
+      }
+    
+      header {
+        width: 100%;
+        height: auto;
+        background: #2D71C8;
+      }
+    
+      .header-left,
+      .header-right {
+        position: relative;
+        color: white;
+        float: left;
+      }
+    
+      .header-left {
+        width: 30%;
+      }
+    
+      .header-right label {
+        position: absolute;
+        top: -3.7em;
+        right: 0;
+        cursor: pointer;
+      }
+    
+      .header-right span {
+        position: relative;
+        width: 2em;
+        height: 2em;
+        background: rgba(255, 255, 255, .3);
+        -webkit-transition: all .3s ease;
+      }
+    
+      .header-right span:hover {
+        background: rgba(255, 255, 255, .6);
+      }
+    
+      .header-right span:before,
+      .header-right span:after {
+        content: '';
+        position: absolute;
+        width: 2em;
+        height: .5em;
+        top: 4px;
+        left: 0;
+        background: black;
+      }
+    
+      .header-right span:after {
+        top: 14px;
+      }
+    
+      .header-right {
+        width: 70%;
+        text-align: right;
+      }
+    
+      #open {
+        display: none;
+      }
+    
+      h1 {
+        font-weight: 300;
+        line-height: 40px;
+      }
+    
+      a {
+        text-decoration: none;
+        color: white;
+      }
+    
+      nav>a {
+        position: relative;
+        display: inline-block;
+        font-size: 13px;
+        line-height: 40px;
+        padding: 0 2em;
+        -webkit-transition: all .3s ease;
+      }
+    
+      nav>a:hover {
+        background: rgba(255, 255, 255, .9);
+        color: black;
+      }
+    
+      .hidden-desktop {
+        display: none;
+      }
+    
+      section {
+        width: 100%;
+        height: auto;
+        background-image: -webkit-linear-gradient(#80059E 0%, #550486 100%);
+      }
+    
+      .section-left,
+      .section-right {
+        float: left;
+      }
+    
+      .section-left {
+        width: 70%;
+        padding: 3em 0;
+      }
+    
+      .section-right {
+        width: 30%;
+      }
+    
+      .section-title,
+      .section-tagline {
+        color: white;
+        font-weight: 300;
+        margin: 0;
+        padding: 0;
+        -webkit-transition: all .4s ease;
+      }
+    
+      .section-title {
+        font-size: 4em;
+        margin-bottom: .3em;
+        text-shadow: 0 3px 0px black,
+          0 4px 0px rgba(150, 150, 150, .5);
+      }
+    
+      .section-tagline {
+        font-size: 1em;
+      }
+    
+      .learn-more {
+        display: table;
+        margin: 3em auto 0;
+        padding: 1em 6em;
+        cursor: pointer;
+        border-radius: 3px;
+        box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .8);
+        background: #EAAF00;
+        background-image: -webkit-linear-gradient(#EAAF00 0%, #D78100 100%);
+        font-size: 1.2em;
+      }
+    
+      .learn-more:hover {
+        background: #EAAF00;
+      }
+    
+      .learn-more:active {
+        box-shadow: inset 0 2px 0 rgba(0, 0, 0, .8);
+      }
+    
+      /* Portrait tablet to landscape and desktop */
+      @media (min-width: 768px) and (max-width: 979px) {
+        .box {
+          width: 49%;
+          margin-bottom: 5%;
+        }
+    
+        ul li:nth-child(3) .box {
+          clear: both;
+        }
+    
+        ul li:nth-child(2n) .box {
+          margin-right: 0;
+          clear: right;
+        }
+      }
+    
+      /* Small monitor */
+      @media (max-width: 979px) {
+        nav>a {
+          padding: 0 1.5em;
+        }
+    
+        .section-left,
+        .section-right {
+          width: 100%;
+        }
+    
+        .section-left {
+          text-align: center;
+        }
+    
+        .section-right {
+          padding: 0 0 2em;
+        }
+    
+        .section-title {
+          font-size: 4em;
+          margin-bottom: .2em;
+        }
+    
+        .section-tagline {
+          font-size: 1.3em;
+        }
+    
+        .learn-more {
+          margin: 0 auto;
+        }
+      }
+    
+      /* Landscape phone to portrait tablet */
+      @media (max-width: 767px) {
+        .container {
+          width: 100%;
+        }
+    
+        nav>a {
+          padding: 0 2em;
+        }
+    
+        h1 {
+          padding: .5em 0;
+        }
+    
+        .header-left,
+        .header-right {
+          width: 100%;
+          text-align: center;
+        }
+    
+        .section-left,
+        .section-right {
+          width: 100%;
+        }
+    
+        .section-left {
+          text-align: center;
+          padding: 2em 0;
+        }
+    
+        .section-right {
+          padding: 1em 0 2em;
+        }
+    
+        .section-title {
+          font-size: 3em;
+          margin-bottom: .2em;
+        }
+    
+        .section-tagline {
+          font-size: 1.3em;
+        }
+    
+        .learn-more {
+          margin: 0 auto;
+        }
+      }
+    
+      /* Landscape phones and down */
+      @media (max-width: 480px) {
+        body {
+          padding: 0 .5em;
+        }
+    
+        .container {
+          width: 90%;
+        }
+    
+        nav {
+          height: 0;
+          overflow: hidden;
+          -webkit-transition: all .3s ease;
+        }
+    
+        input[type="checkbox"]:checked+nav {
+          height: 205px;
+        }
+    
+        nav>a {
+          padding: 0 1em;
+          display: block;
+          border-bottom: solid 1px rgba(255, 255, 255, .1);
+        }
+    
+        h1 {
+          padding: .5em 0;
+        }
+    
+        .header-left,
+        .header-right {
+          width: 100%;
+          text-align: center;
+        }
+    
+        .section-left,
+        .section-right {
+          width: 100%;
+        }
+    
+        .section-left {
+          text-align: center;
+          padding: 1em 0;
+        }
+    
+        .section-right {
+          text-align: center;
+          padding: 1em 0 2em;
+        }
+    
+        .section-title {
+          font-size: 2.4em;
+          margin-bottom: 0;
+        }
+    
+        .section-tagline {
+          font-size: 1em;
+        }
+    
+        .learn-more {
+          display: table;
+          margin: 0 auto;
+        }
+    
+        .hidden-desktop {
+          display: block;
+        }
+      }
+    
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+      }
+    
+      li {
+        float: left;
+      }
+    
+      ul {
+        position: -webkit-sticky;
+        /* Safari */
+        position: sticky;
+        top: 0;
+      }
+    
+      li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+    
+      /* Change the link color to #111 (black) on hover */
+      li a:hover {
+        background-color: #111;
+      }
+    
+      .active {
+        background-color: #4CAF50;
+      }
+    </style>
+    
+    
+    
+    <style>
+      p.v {
+        font-family: "Verdana", Geneva, sans-serif;
+        font-size: 150%;
+        color: blue;
+      }
+    
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        width: 60%;
+        height: 31.25%;
+        position: absolute;
+        left: 20%;
+        /* padding-right: 10%; */
+      }
+    
+      #canvas {}
+    
+      #canvas-svg {}
+    
+    
+      .land {
+        fill: #222;
+      }
+    
+      .boundary {
+        fill: none;
+        stroke: #fff;
+        stroke-width: 1px;
+      }
+    
+      #tooltip-container {
+        position: absolute;
+        background-color: #fff;
+        color: #000;
+        padding: 10px;
+        border: 1px solid;
+        display: none;
+      }
+    
+      .tooltip_key {
+        font-weight: bold;
+      }
+    
+      .tooltip_value {
+        margin-left: 20px;
+        float: right;
+      }
+    </style>
+<style>
+  
+p.v{
+  font-family: "Verdana", Geneva, sans-serif;
+  font-size: 150%;
+  color: blue;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  width: 60%;
+  height: 31.25%;
+  position: relative;
+  left: 20%;
+  /* background-color: lightblue; */
+  /* padding-right: 10%; */
+}
+
+#canvas {
+}
+
+#canvas-svg {
+}
+
+
+.land {
+  fill: #222;
+}
+
+.boundary {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1px;
+}
+
+#tooltip-container {
+  position: absolute;
+  background-color: #fff;
+  color: #000;
+  padding: 10px;
+  border: 1px solid;
+  display: none;
+}
+
+.tooltip_key {
+  font-weight: bold;
+}
+
+.tooltip_value {
+  margin-left: 20px;
+  float: right;
+}
+
+</style>
+
+<div id="tooltip-container"></div>
+
+<div id="canvas-svg"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.1.0/topojson.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script>
+
+d3.csv("finalPop.csv", function(err, data) {
+  console.log(data);
+  var config = {"data0":"Country (or dependent territory)","data1":"Capita",
+              "label0":"label 0","label1":"label 1","color0":"#99ccff","color1":"#0050A1",
+              "width":960,"height":960}
+  
+  var width = config.width,
+      height = config.height;
+  
+  var COLOR_COUNTS = 9;
+  
+  function Interpolate(start, end, steps, count) {
+      var s = start,
+          e = end,
+          final = s + (((e - s) / steps) * count);
+      return Math.floor(final);
+  }
+  
+  function Color(_r, _g, _b) {
+      var r, g, b;
+      var setColors = function(_r, _g, _b) {
+          r = _r;
+          g = _g;
+          b = _b;
+      };
+  
+      setColors(_r, _g, _b);
+      this.getColors = function() {
+          var colors = {
+              r: r,
+              g: g,
+              b: b
+          };
+          return colors;
+      };
+  }
+  
+  function hexToRgb(hex) {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16)
+      } : null;
+  }
+  
+  function valueFormat(d) {
+    // if (d > 1000000000) {
+    //   return Math.round(d / 1000000000 * 10) / 10 + "B";
+    // } else if (d > 1000000) {
+    //   return Math.round(d / 1000000 * 10) / 10 + "M";
+    // } else if (d > 1000) {
+    //   return Math.round(d / 1000 * 10) / 10 + "K";
+    // } else {
+      return d;
+    // }
+  }
+  
+  var COLOR_FIRST = config.color0, COLOR_LAST = config.color1;
+  
+  var rgb = hexToRgb(COLOR_FIRST);
+  
+  var COLOR_START = new Color(rgb.r, rgb.g, rgb.b);
+  
+  rgb = hexToRgb(COLOR_LAST);
+  var COLOR_END = new Color(rgb.r, rgb.g, rgb.b);
+  
+  var startColors = COLOR_START.getColors(),
+      endColors = COLOR_END.getColors();
+  
+  var colors = [];
+  
+  for (var i = 0; i < COLOR_COUNTS; i++) {
+    var r = Interpolate(startColors.r, endColors.r, COLOR_COUNTS, i);
+    var g = Interpolate(startColors.g, endColors.g, COLOR_COUNTS, i);
+    var b = Interpolate(startColors.b, endColors.b, COLOR_COUNTS, i);
+    colors.push(new Color(r, g, b));
+  }
+  
+  var MAP_KEY = config.data0;
+  var MAP_VALUE = config.data1;
+  
+  var projection = d3.geo.mercator()
+      .scale((width + 1) / 2 / Math.PI)
+      .translate([width / 2, height / 2])
+      .precision(.1);
+  
+  var path = d3.geo.path()
+      .projection(projection);
+  
+  var graticule = d3.geo.graticule();
+  
+  var svg = d3.select("#canvas-svg").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+  
+  svg.append("path")
+      .datum(graticule)
+      .attr("class", "graticule")
+      .attr("d", path);
+  
+  var valueHash = {};
+  
+  function log10(val) {
+    return Math.log(val);
+  }
+  
+  data.forEach(function(d) {
+    valueHash[d[MAP_KEY]] = +d[MAP_VALUE];
+  });
+  
+  var quantize = d3.scale.quantize()
+      .domain([0, 1.0])
+      .range(d3.range(COLOR_COUNTS).map(function(i) { return i }));
+  
+  quantize.domain([d3.min(data, function(d){
+      return (+d[MAP_VALUE]) }),
+    d3.max(data, function(d){
+      return (+d[MAP_VALUE]) })]);
+  
+  d3.json("https://s3-us-west-2.amazonaws.com/vida-public/geo/world-topo-min.json", function(error, world) {
+    var countries = topojson.feature(world, world.objects.countries).features;
+  
+    svg.append("path")
+       .datum(graticule)
+       .attr("class", "choropleth")
+       .attr("d", path);
+  
+    var g = svg.append("g");
+  
+    g.append("path")
+     .datum({type: "LineString", coordinates: [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]]})
+     .attr("class", "equator")
+     .attr("d", path);
+  
+    var country = g.selectAll(".country").data(countries);
+  
+    country.enter().insert("path")
+        .attr("class", "country")
+        .attr("d", path)
+        .attr("id", function(d,i) { return d.id; })
+        .attr("title", function(d) { return d.properties.name; })
+        .style("fill", function(d) {
+          if (valueHash[d.properties.name]) {
+            var c = quantize((valueHash[d.properties.name]));
+            var color = colors[c].getColors();
+            return "rgb(" + color.r + "," + color.g +
+                "," + color.b + ")";
+          } else {
+            return "#ccc";
+          }
+        })
+        .on("mousemove", function(d) {
+            var html = "";
+  
+            html += "<div class=\"tooltip_kv\">";
+            html += "<span class=\"tooltip_key\">";
+            html += d.properties.name;
+            html += "</span>";
+            html += "<span class=\"tooltip_value\">";
+            html += (valueHash[d.properties.name] ? valueFormat(valueHash[d.properties.name]) : "");
+            html += "";
+            html += "</span>";
+            html += "</div>";
+            
+            $("#tooltip-container").html(html);
+            $(this).attr("fill-opacity", "0.8");
+            $("#tooltip-container").show();
+            
+            var coordinates = d3.mouse(this);
+            
+            var map_width = $('.choropleth')[0].getBoundingClientRect().width;
+            
+            if (d3.event.pageX < map_width / 2) {
+              d3.select("#tooltip-container")
+                .style("top", (d3.event.layerY + 15) + "px")
+                .style("left", (d3.event.layerX + 15) + "px");
+            } else {
+              var tooltip_width = $("#tooltip-container").width();
+              d3.select("#tooltip-container")
+                .style("top", (d3.event.layerY + 15) + "px")
+                .style("left", (d3.event.layerX - tooltip_width - 30) + "px");
+            }
+        })
+        .on("mouseout", function() {
+                $(this).attr("fill-opacity", "1.0");
+                $("#tooltip-container").hide();
+            });
+    
+    g.append("path")
+        .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+        .attr("class", "boundary")
+        .attr("d", path);
+    
+    svg.attr("height", config.height * 2.2 / 3);
+  });
+  
+  d3.select(self.frameElement).style("height", (height * 2.3 / 3) + "px");
+});
+
+</script>
