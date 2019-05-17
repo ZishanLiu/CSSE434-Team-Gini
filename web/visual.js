@@ -9,29 +9,20 @@
 // import * as d3 from 'd3';
 // require("./stylesheet.css");
 
-window.onload=()=>{
-  var data = d3.csvParse('recent.csv');
+window.onload = function () {
+  
+  var r = new FileReader();
+  r.readAsText('recent.csv', config.encoding);
+  r.onload = function () {
+    
+    var data = d3.csvParse(this.result);
     try {
       draw(data);
     } catch (error) {
       alert(error);
     }
+  };
 };
-
-// $("#inputfile").change(function () {
-//   $("#inputfile").attr("hidden", true);
-//   var r = new FileReader();
-//   r.readAsText(this.files[0], config.encoding);
-//   r.onload = function () {
-//     //读取完成后，数据保存在对象的result属性中
-//     var data = d3.csvParse(this.result);
-//     try {
-//       draw(data);
-//     } catch (error) {
-//       alert(error);
-//     }
-//   };
-// });
 
 function draw(data) {
   var date = [];
@@ -124,7 +115,7 @@ function draw(data) {
   var offset = config.offset;
   var animation = config.animation;
   var deformat = config.deformat;
-  //config.imgs = Object.assign(config.imgs, external_imgs);
+  config.imgs = Object.assign(config.imgs, external_imgs);
 
   const margin = {
     left: left_margin,
