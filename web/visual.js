@@ -2,27 +2,23 @@
  * @type Jannchie
  * @email jannchie@gmail.com
  * @create date 2018-05-02 13:17:10
- * @modify date 2019-03-20 15:17:24
+ * @modify date 2019-02-11 12:49:53
  * @desc Visual core code
  */
 
 // import * as d3 from 'd3';
 // require("./stylesheet.css");
 
-$("#inputfile").change(function () {
-  $("#inputfile").attr("hidden", true);
-  var r = new FileReader();
-  r.readAsText(this.files[0], config.encoding);
-  r.onload = function () {
-    //读取完成后，数据保存在对象的result属性中
-    var data = d3.csvParse(this.result);
-    try {
-      draw(data);
-    } catch (error) {
-      alert(error);
-    }
-  };
-});
+window.onload=()=>{
+  d3.csv('recent.csv',e=>({
+    name:e.repo,
+    value:+e.userID,
+    date:e.created_at,
+    type:e.repo,
+  })).then(data=>{
+    draw(data)
+  });
+}
 
 function draw(data) {
   var date = [];
@@ -44,7 +40,6 @@ function draw(data) {
   var divide_color_by = config.divide_color_by;
   var name_list = [];
   var changeable_color = config.changeable_color;
-  var divide_changeable_color_by_type = config.divide_changeable_color_by_type;
   data
     .sort((a, b) => Number(b.value) - Number(a.value))
     .forEach(e => {
@@ -53,15 +48,11 @@ function draw(data) {
       }
     });
   var baseTime = 3000;
-
+  var colorRange = d3.interpolateCubehelix(config.color_range[0], config.color_range[1]);
   // 选择颜色
   function getColor(d) {
     var r = 0.0;
     if (changeable_color) {
-      var colorRange = d3.interpolateCubehelix(config.color_range[0], config.color_range[1]);
-      if (divide_changeable_color_by_type && d["type"] in config.color_ranges) {
-        var colorRange = d3.interpolateCubehelix(config.color_ranges[d["type"]][0], config.color_ranges[d["type"]][1]);
-      }
       var v =
         Math.abs(rate[d.name] - rate["MIN_RATE"]) /
         (rate["MAX_RATE"] - rate["MIN_RATE"]);
@@ -82,7 +73,6 @@ function draw(data) {
 
   var showMessage = config.showMessage;
   var allow_up = config.allow_up;
-  var always_up = config.always_up;
   var interval_time = config.interval_time;
   var text_y = config.text_y;
   var itemLabel = config.itemLabel;
@@ -114,9 +104,6 @@ function draw(data) {
   var text_x = config.text_x;
   var offset = config.offset;
   var animation = config.animation;
-  var deformat = config.deformat;
-  config.imgs = Object.assign(config.imgs, external_imgs);
-
   const margin = {
     left: left_margin,
     right: right_margin,
@@ -125,7 +112,7 @@ function draw(data) {
   };
   var background_color = config.background_color;
 
-  d3.select("body").attr("style", "background:" + background_color);
+  d3.select(".main-chart").attr("style", "background:" + background_color);
 
   var enter_from_0 = config.enter_from_0;
   interval_time /= 3;
@@ -165,22 +152,21 @@ function draw(data) {
   }
   const yScale = d3
     .scaleBand()
-    .paddingInner(0.3)
-    .paddingOuter(0);
+    .padding(0.2)
 
   const xTicks = 10;
   const xAxis = d3
-    .axisBottom()
-    .scale(xScale)
-    .ticks(xTicks)
-    .tickPadding(20)
-    .tickFormat(d => {
-      if (d <= 0) {
-        return "";
-      }
-      return d;
-    })
-    .tickSize(-innerHeight);
+    .axisBottom(xScale)
+
+    // .ticks(xTicks)
+    // .tickPadding(20)
+    // .tickFormat(d => {
+    //   if (d <= 0) {
+    //     return "";
+    //   }
+    //   return d;
+    // })
+    // .tickSize(-innerHeight);
 
   const yAxis = d3
     .axisLeft()
@@ -196,23 +182,30 @@ function draw(data) {
     dateLabel_x = innerWidth; //默认
     dateLabel_y = innerHeight; //默认
   } //是否隐藏
-  // if (dateLabel_switch == false) {
+  if (dateLabel_switch == false) {
     dateLabel_switch = "hidden";
-  // } else {
-  //   dateLabel_switch = "visible";
-  // }
+  } else {
+    dateLabel_switch = "visible";
+  }
+  var dateLabel=d3.select('svg')
+      .append('text')
+      .attr('x',20)
+      .attr('y',700)
+      
+      .attr('font-size','24px')
+      .attr('opacity','0.6')
 
-  var dateLabel = g
-    .insert("text")
-    .data(currentdate)
-    .attr("class", "dateLabel")
-    .attr("style:visibility", dateLabel_switch)
-    .attr("x", dateLabel_x)
-    .attr("y", dateLabel_y)
-    .attr("text-anchor", function () {
-      return "end";
-    })
-    .text(currentdate);
+  // var dateLabel = g
+  //   .insert("text")
+  //   .data(currentdate)
+  //   .attr("class", "dateLabel")
+  //   .attr("style:visibility", dateLabel_switch)
+  //   .attr("x", dateLabel_x)
+  //   .attr("y", dateLabel_y)
+  //   .attr("text-anchor", function () {
+  //     return "end";
+  //   })
+  //   .text(currentdate);
 
   var topLabel = g
     .insert("text")
@@ -263,12 +256,12 @@ function draw(data) {
 
     data.forEach(element => {
       if (element["date"] == date && parseFloat(element["value"]) != 0) {
-        if (element.name.length > config.bar_name_max) {
-          tail = "...";
-        } else {
-          tail = "";
-        }
-        element.name = element.name.slice(0, config.bar_name_max - 1) + tail;
+        // if (element.name.length > config.bar_name_max) {
+        //   tail = "...";
+        // } else {
+        //   tail = "";
+        // }
+        // element.name = element.name.slice(0, config.bar_name_max - 1);
         currentData.push(element);
       }
     });
@@ -363,28 +356,31 @@ function draw(data) {
         .domain([0, d3.max(currentData, xValue) + 1])
         .range([0, innerWidth]);
     }
-    if (auto_sort) {
-      dateLabel
-        .data(currentData)
-        .transition()
-        .duration(baseTime * interval_time)
-        .ease(d3.easeLinear)
-        .tween("text", function (d) {
-          var self = this;
-          var i = d3.interpolateDate(
-            new Date(self.textContent),
-            new Date(d.date)
-          );
-          // var prec = (new Date(d.date) + "").split(".");
-          // var round = (prec.length > 1) ? Math.pow(10, prec[1].length) : 1;
-          return function (t) {
-            var dateformat = d3.timeFormat(timeFormat);
-            self.textContent = dateformat(i(t));
-          };
-        });
-    } else {
-      dateLabel.text(currentdate);
-    }
+    
+
+    dateLabel.text(currentdate)
+    // if (auto_sort) {
+    //   dateLabel
+    //     .data(currentData)
+    //     .transition()
+    //     .duration(baseTime * interval_time)
+    //     .ease(d3.easeLinear)
+    //     .tween("text", function (d) {
+    //       var self = this;
+    //       var i = d3.interpolateDate(
+    //         new Date(self.textContent),
+    //         new Date(d.date)
+    //       );
+    //       // var prec = (new Date(d.date) + "").split(".");
+    //       // var round = (prec.length > 1) ? Math.pow(10, prec[1].length) : 1;
+    //       return function (t) {
+    //         var dateformat = d3.timeFormat(timeFormat);
+    //         self.textContent = dateformat(i(t));
+    //       };
+    //     });
+    // } else {
+    //   dateLabel.text(currentdate);
+    // }
 
     xAxisG
       .transition()
@@ -475,12 +471,12 @@ function draw(data) {
         .append("circle")
         .attr("fill-opacity", 0)
         .attr("cy", 63)
-        .attr('fill', d => "url(#" + encodeURIComponent(d.name).replace("'", "%27").replace("(", "%28").replace(")", "%29") + ")")
+        .attr("fill", d => "url(#" + d.name + ")")
         .attr("stroke-width", "0px")
         .transition("a")
-        .delay(500 * interval_time)
-        .duration(2490 * interval_time)
-        .attr("stroke", d => getColor(d))
+        .delay(200 * interval_time)
+        .duration(2000 * interval_time)
+        .attr("stroke", d=>getColor(d))
         .attr("stroke-width", "4px")
         .attr("x", -16)
         .attr("cx", -22)
@@ -502,7 +498,7 @@ function draw(data) {
       .attr("y", 50)
       .style("fill", d => getColor(d))
       .transition("a")
-      .delay(500 * interval_time)
+      .delay(100 * interval_time)
       .duration(2490 * interval_time)
       .attr("y", 0)
       .attr("width", d => xScale(xValue(d)))
@@ -518,8 +514,8 @@ function draw(data) {
         .attr("fill-opacity", 0)
         .style("fill", d => getColor(d))
         .transition("2")
-        .delay(500 * interval_time)
-        .duration(2490 * interval_time)
+        .delay(100 * interval_time)
+        .duration(2000 * interval_time)
         .attr("fill-opacity", 1)
         .attr("y", 0)
         .attr("class", function (d) {
@@ -537,54 +533,54 @@ function draw(data) {
     }
 
     // bar上文字
-    var barInfo = barEnter
-      .append("text")
-      .attr("x", function (d) {
-        if (long) return 10;
-        if (enter_from_0) {
-          return 0;
-        } else {
-          return xScale(currentData[currentData.length - 1].value);
-        }
-      })
-      .attr("stroke", d => getColor(d))
-      .attr("class", function () {
-        return "barInfo";
-      })
-      .attr("y", 50)
-      .attr("stroke-width", "0px")
-      .attr("fill-opacity", 0)
-      .transition()
-      .delay(500 * interval_time)
-      .duration(2490 * interval_time)
-      .text(function (d) {
-        if (use_type_info) {
-          return d[divide_by] + "-" + d.name;
-        }
-        return d.name;
-      })
-      .attr("x", d => {
-        if (long) return 10;
-        return xScale(xValue(d)) - 10;
-      })
-      .attr("fill-opacity", function (d) {
-        if (xScale(xValue(d)) - 10 < display_barInfo) {
-          return 0;
-        }
-        return 1;
-      })
-      .attr("y", 2)
-      .attr("dy", ".5em")
-      .attr("text-anchor", function () {
-        if (long) return "start";
-        return "end";
-      })
-      .attr("stroke-width", function (d) {
-        if (xScale(xValue(d)) - 10 < display_barInfo) {
-          return "0px";
-        }
-        return "1px";
-      });
+    // var barInfo = barEnter
+    //   .append("text")
+    //   .attr("x", function (d) {
+    //     if (long) return 10;
+    //     if (enter_from_0) {
+    //       return 0;
+    //     } else {
+    //       return xScale(currentData[currentData.length - 1].value);
+    //     }
+    //   })
+    //   .attr("stroke", d => getColor(d))
+    //   .attr("class", function () {
+    //     return "barInfo";
+    //   })
+    //   .attr("y", 50)
+    //   .attr("stroke-width", "0px")
+    //   .attr("fill-opacity", 0)
+    //   .transition()
+    //   .delay(500 * interval_time)
+    //   .duration(2490 * interval_time)
+    //   .text(function (d) {
+    //     if (use_type_info) {
+    //       return d[divide_by] + "-" + d.name;
+    //     }
+    //     return d.name;
+    //   })
+    //   .attr("x", d => {
+    //     if (long) return 10;
+    //     return xScale(xValue(d)) - 10;
+    //   })
+    //   .attr("fill-opacity", function (d) {
+    //     if (xScale(xValue(d)) - 10 < display_barInfo) {
+    //       return 0;
+    //     }
+    //     return 1;
+    //   })
+    //   .attr("y", 2)
+    //   .attr("dy", ".5em")
+    //   .attr("text-anchor", function () {
+    //     if (long) return "start";
+    //     return "end";
+    //   })
+    //   .attr("stroke-width", function (d) {
+    //     if (xScale(xValue(d)) - 10 < display_barInfo) {
+    //       return "0px";
+    //     }
+    //     return "1px";
+    //   });
     if (long) {
       barInfo.tween("text", function (d) {
         var self = this;
@@ -741,8 +737,6 @@ function draw(data) {
             var i = d3.interpolate(self.textContent.slice(0, -config.postfix.length), Number(d.value));
           }
 
-          var i = d3.interpolate(deformat(self.textContent, config.postfix), Number(d.value))
-
           var prec = (Number(d.value) + "").split("."),
             round = prec.length > 1 ? Math.pow(10, prec[1].length) : 1;
           // d.value = self.textContent
@@ -768,9 +762,6 @@ function draw(data) {
       .duration(2500 * interval_time);
     barExit
       .attr("transform", function (d) {
-        if (always_up) {
-          return "translate(0," + "-100" + ")";
-        }
         if (Number(d.value) > avg && allow_up) {
           return "translate(0," + "-100" + ")";
         }
@@ -781,16 +772,12 @@ function draw(data) {
     barExit
       .select("rect")
       .attr("fill-opacity", 0)
-      .attr("width", () => {
-        if (always_up) return xScale(0);
-        return xScale(currentData[currentData.length - 1]["value"])
-      })
+      .attr("width", xScale(currentData[currentData.length - 1]["value"]));
     if (!long) {
       barExit
         .select(".value")
         .attr("fill-opacity", 0)
         .attr("x", () => {
-          if (always_up) return xScale(0);
           return xScale(currentData[currentData.length - 1]["value"]);
         });
     }
@@ -802,13 +789,9 @@ function draw(data) {
       })
       .attr("x", () => {
         if (long) return 10;
-        if (always_up) return xScale(0);
         return xScale(currentData[currentData.length - 1]["value"]);
       });
     barExit.select(".label").attr("fill-opacity", 0);
-    if (config.use_img) {
-      barExit.select("circle").attr("fill-opacity", 0)
-    }
   }
 
   function change() {
