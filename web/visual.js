@@ -12,7 +12,7 @@
 window.onload = function () {
   
   var r = new FileReader();
-  r.readAsText('recent.csv', config.encoding);
+  r.readAsDataURL('recent.csv', config.encoding);
   r.onload = function () {
     
     var data = d3.csvParse(this.result);
