@@ -112,7 +112,7 @@ function draw(data) {
   };
   var background_color = config.background_color;
 
-  d3.select(".main-chart").attr("style", "background:" + background_color);
+  d3.select("body").attr("style", "background:" + background_color);
 
   var enter_from_0 = config.enter_from_0;
   interval_time /= 3;

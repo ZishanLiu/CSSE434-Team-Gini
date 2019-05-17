@@ -2,7 +2,7 @@
 @author Jannchie
 @email jannchie@gmail.com
 @create date 2018-07-18 08:42:38
-@modify date 2019-03-20 15:17:15
+@modify date 2019-02-11 12:48:52
 @desc A data visualization project based on d3.js. 
 -->
 <!DOCTYPE html>
@@ -11,29 +11,20 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <title>Gini-index</title>
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> -->
+        <link rel="stylesheet" href="stylesheet.css">
+    <title>Animated bar chart</title>
 </head>
 
 <body>
-    <div>
-        <a href="index.html" style="font-size:25px;height:30px;color:black;">Go Back!</a>
-    </div>
-    <div class="main-chart"> 
+    <script src="https://d3js.org/d3.v5.min.js"></script>
 
-    </div>
     <center>
-        <a href="top.csv" style="font-weight: bold; text-decoration-line: none; color: black;">Download Countries With Highest Gini-Indices!</a><br>
-        <a href="low.csv" style="font-weight: bold; text-decoration-line: none; color: black">Download Countries With Lowest Gini-Indeices</a>
-        <input type="file" id="inputfile" name="fileContent">
-        <svg width="1900" height="1020"></svg>
-        <script src="config.js"></script>
-        <script src="imgs.js"></script>
-        <script src="color_ranges.js"></script>
-        <script src="visual.js"></script>
-        <link rel="stylesheet" href="stylesheet.css">
+        
+        <svg width="1200" height="800"></svg>
     </center>
+        <script src="config.js"></script>
+        <script src="visual.js"></script>
 </body>
 
 </html>
