@@ -111,7 +111,7 @@ function draw(data) {
   var offset = config.offset;
   var animation = config.animation;
   var deformat = config.deformat;
-  config.imgs = Object.assign(config.imgs, external_imgs);
+  //config.imgs = Object.assign(config.imgs, external_imgs);
 
   const margin = {
     left: left_margin,
