@@ -9,20 +9,17 @@
 // import * as d3 from 'd3';
 // require("./stylesheet.css");
 
-window.onload = function () {
-  
-  var r = new FileReader();
-  r.readAsDataURL('recent.csv', config.encoding);
-  r.onload = function () {
-    
-    var data = d3.csvParse(this.result);
-    try {
-      draw(data);
-    } catch (error) {
-      alert(error);
-    }
-  };
-};
+
+window.onload=()=>{
+  d3.csv('top.csv',e=>({
+    name:e.repo,
+    value:+e.userID,
+    date:e.created_at,
+    type:e.repo,
+  })).then(data=>{
+    draw(data)
+  });
+}
 
 function draw(data) {
   var date = [];
