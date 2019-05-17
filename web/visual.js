@@ -10,21 +10,34 @@
 // require("./stylesheet.css");
 
 window.onload=()=>{
-  d3.csv('recent.csv',e=>({
-    name:e.country,
-    value:+e.value,
-    // date:e.created_at,
-    // type:e.repo,
-  })).then(data=>{
-    draw(data);
-  });
+  var data = d3.csvParse('recent.csv');
+    try {
+      draw(data);
+    } catch (error) {
+      alert(error);
+    }
 };
+
+// $("#inputfile").change(function () {
+//   $("#inputfile").attr("hidden", true);
+//   var r = new FileReader();
+//   r.readAsText(this.files[0], config.encoding);
+//   r.onload = function () {
+//     //读取完成后，数据保存在对象的result属性中
+//     var data = d3.csvParse(this.result);
+//     try {
+//       draw(data);
+//     } catch (error) {
+//       alert(error);
+//     }
+//   };
+// });
 
 function draw(data) {
   var date = [];
   data.forEach(element => {
-    if (date.indexOf(element["country"]) == -1) {
-      date.push(element["country"]);
+    if (date.indexOf(element["date"]) == -1) {
+      date.push(element["date"]);
     }
   });
   let rate = [];
@@ -44,8 +57,8 @@ function draw(data) {
   data
     .sort((a, b) => Number(b.value) - Number(a.value))
     .forEach(e => {
-      if (name_list.indexOf(e.country) == -1) {
-        name_list.push(e.country);
+      if (name_list.indexOf(e.name) == -1) {
+        name_list.push(e.name);
       }
     });
   var baseTime = 3000;
@@ -111,7 +124,7 @@ function draw(data) {
   var offset = config.offset;
   var animation = config.animation;
   var deformat = config.deformat;
-  //config.imgs = Object.assign(config.imgs, external_imgs);
+  config.imgs = Object.assign(config.imgs, external_imgs);
 
   const margin = {
     left: left_margin,
