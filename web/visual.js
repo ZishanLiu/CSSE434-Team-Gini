@@ -11,10 +11,10 @@
 
 window.onload=()=>{
   d3.csv('recent.csv',e=>({
-    name:e.repo,
-    value:+e.userID,
-    date:e.created_at,
-    type:e.repo,
+    name:e.country,
+    value:+e.value,
+    // date:e.created_at,
+    // type:e.repo,
   })).then(data=>{
     draw(data);
   });
@@ -23,8 +23,8 @@ window.onload=()=>{
 function draw(data) {
   var date = [];
   data.forEach(element => {
-    if (date.indexOf(element["date"]) == -1) {
-      date.push(element["date"]);
+    if (date.indexOf(element["country"]) == -1) {
+      date.push(element["country"]);
     }
   });
   let rate = [];
@@ -44,8 +44,8 @@ function draw(data) {
   data
     .sort((a, b) => Number(b.value) - Number(a.value))
     .forEach(e => {
-      if (name_list.indexOf(e.name) == -1) {
-        name_list.push(e.name);
+      if (name_list.indexOf(e.country) == -1) {
+        name_list.push(e.country);
       }
     });
   var baseTime = 3000;
