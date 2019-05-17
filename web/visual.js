@@ -11,10 +11,10 @@
 
 window.onload=()=>{
   d3.csv('top.csv',e=>({
-    name:e.repo,
-    value:+e.userID,
-    date:e.created_at,
-    type:e.repo,
+    name:e.name,
+    value:+e.value,
+    date:e.date,
+    type:e.type,
   })).then(data=>{
     draw(data)
   });
